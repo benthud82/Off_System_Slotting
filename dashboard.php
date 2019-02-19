@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-    <?php
+ <?php
     include 'sessioninclude.php';
     include_once 'connection/connection_details.php';
     ?>
