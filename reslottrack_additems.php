@@ -17,7 +17,10 @@
             <!--Shows user if post to table was a success.-->
             <div id="postsuccess"></div>
 
-            <h2 align="center">Add items to be tracked through the re-slot tracking tool</h2>  
+            <h2 align="">Add items to be tracked through the re-slot tracking tool</h2>  
+            <h4 align="">Note: Items added today will not be shown on the re-slot tracking tool until the next business day.</h4>  
+            <h4>Go To Re-slot Tracking Tool<a href= "relslot_tracking.php"  target=_blank><i class='fa fa-external-link-square' style='cursor: pointer;     margin-left: 5px;' data-toggle='tooltip' data-title='Go to Re-slot Tracking Tool' data-placement='top' data-container='body' ></i></a></h4>
+
             <div class="form-group">
                 <form name="add_name" id="add_name">
 
@@ -44,7 +47,7 @@
                                 <td><button type="button" name="remove" id="1" class="btn btn-danger btn_remove">X</button></td>
                             </tr>  
                         </table>  
-                        <button type="button" name="add" id="add" class="btn btn-success">Add More</button>
+                        <button type="button" name="add" id="add" class="btn btn-success">Click to Add More Lines</button>
                         <input type="button" name="submit" id="submit" class="btn btn-info" value="Submit" />  
                     </div>
 

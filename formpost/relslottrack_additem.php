@@ -39,7 +39,7 @@ if ($number > 0) {
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg>
-            <div class="h4" style="text-align: center; padding-bottom: 30px">Successfully added <?php echo $rowcount . ' items to your total move count!'; ?> </div>
+            <div class="h4" style="text-align: center; padding-bottom: 30px">Successfully added <?php echo $rowcount . ' item to the re-slot tracking tool!'; ?> </div>
         </div>
     </div>
 </div>

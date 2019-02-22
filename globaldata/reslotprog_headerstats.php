@@ -7,6 +7,35 @@ $whssqlarray = $whssql->fetchAll(pdo::FETCH_ASSOC);
 $var_whse = $whssqlarray[0]['slottingDB_users_PRIMDC'];
 
 
+//Is there pending items to be tracked.  Added to item list but not yet gone through night stream
+$totaladded = $conn1->prepare("SELECT 
+                                                                COUNT(*) AS trackcount
+                                                            FROM
+                                                                slotting.reslot_tracking
+                                                            WHERE
+                                                                reslot_whse = $var_whse");
+$totaladded->execute();
+$totaladded_array = $totaladded->fetchAll(pdo::FETCH_ASSOC);
+
+$totaltracked = $conn1->prepare("SELECT 
+                                                                    COUNT(*) AS progcount
+                                                                FROM
+                                                                    slotting.reslot_tracking_progress
+                                                                WHERE
+                                                                    reslotprog_whse = $var_whse");
+$totaltracked->execute();
+$totaltracked_array = $totaltracked->fetchAll(pdo::FETCH_ASSOC);
+
+if (!empty($totaladded_array) && !empty($totaltracked_array)) {
+    $countdif = intval($totaladded_array[0]['trackcount']) - intval($totaltracked_array[0]['progcount']);
+}
+
+if ($countdif > 0) {
+    ?>
+    <div class="alert alert-success" style="font-size: 100%;"> <button type="button" class="close" data-dismiss="alert"><i class="fa fa-times"></i></button> <i class="fa fa-info-circle fa-lg"></i><span> There are <?php echo $countdif ?> item(s) pending.  Tracking will begin on next business day. </span></div>
+    <?php
+}
+
 $hdr_movecountsql = $conn1->prepare("SELECT 
                                                                                     COUNT(*) as RESLOTCOUNT
                                                                                 FROM
@@ -16,7 +45,13 @@ $hdr_movecountsql = $conn1->prepare("SELECT
                                                                                         AND reslotprog_whse = $var_whse;");
 $hdr_movecountsql->execute();
 $hdr_movecountsqlarray = $hdr_movecountsql->fetchAll(pdo::FETCH_ASSOC);
-$movecount = $hdr_movecountsqlarray[0]['RESLOTCOUNT'];
+
+
+if (!empty($hdr_movecountsqlarray)) {
+    $movecount = $hdr_movecountsqlarray[0]['RESLOTCOUNT'];
+} else {
+    $movecount = 0;
+}
 
 $hdr_yearincrease = $conn1->prepare("SELECT 
                                                                     SUM(reslotprog_movered) AS TOT_MOVERED,
@@ -28,8 +63,14 @@ $hdr_yearincrease = $conn1->prepare("SELECT
                                                                 GROUP BY reslotprog_whse");
 $hdr_yearincrease->execute();
 $hdr_yearincrease_array = $hdr_yearincrease->fetchAll(pdo::FETCH_ASSOC);
-$movered = $hdr_yearincrease_array[0]['TOT_MOVERED'];
-$walkred = $hdr_yearincrease_array[0]['TOT_WALKRED'];
+
+if (!empty($hdr_yearincrease_array)) {
+    $movered = $hdr_yearincrease_array[0]['TOT_MOVERED'];
+    $walkred = $hdr_yearincrease_array[0]['TOT_WALKRED'];
+} else {
+    $movered = 0;
+    $walkred = 0;
+}
 
 $movecountcolor = 'blue-madison';
 
