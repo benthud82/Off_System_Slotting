@@ -301,6 +301,26 @@
                     </div>
                 </section>
 
+                <!--Actual Walk Distance (cart and aisle) per whse line-->
+                <section class="panel hidewrapper" id="graph_actwalk" style="margin-bottom: 50px; margin-top: 20px;"> 
+                    <header class="panel-heading bg bg-inverse h2">Historical Total Feet Per Pick - Cart and Aisle<i class="fa fa-close pull-right closehidden" style="cursor: pointer;" id="close_fpp"></i><i class="fa fa-chevron-up pull-right clicktotoggle-chevron" style="cursor: pointer;"></i></header>
+                    <div id="historicalactwalk" class="panel-body" style="background: #efefef">
+                        <div id="chartpage_actwalk"  class="page-break" style="width: 100%">
+                            <div id="charts padded">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="alert alert-info " style="font-size: 100%;"> <button type="button" class="close" data-dismiss="alert"><i class="fa fa-times"></i></button> <i class="fa fa-info-circle fa-lg"></i><span> On average, how many aisle feet are walked per item picked. </span></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="alert alert-success" style="font-size: 100%;"> <button type="button" class="close" data-dismiss="alert"><i class="fa fa-times"></i></button> <i class="fa fa-arrow-down fa-lg"></i><span> Positive improvement indicated by <strong>downward</strong> trending graph. </span></div>
+                                    </div>
+                                </div>
+                                <div id="container_actwalk" class="dashboardstyle printrotate"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
                 <!--Capacity gauges-->
                 <section class="panel hidewrapper" id="graph_capacity" style="margin-bottom: 50px; margin-top: 20px;"> 
                     <header class="panel-heading bg bg-inverse h2">Capacity Gauges<i class="fa fa-close pull-right closehidden" style="cursor: pointer;" id="close_fpp"></i><i class="fa fa-chevron-up pull-right clicktotoggle-chevron" style="cursor: pointer;"></i></header>
@@ -882,6 +902,90 @@
                     }
                 });
 
+
+                //options for actual walk
+                var options7 = {
+                    chart: {
+                        marginTop: 50,
+                        marginBottom: 135,
+                        renderTo: 'container_actwalk',
+                        type: 'spline'
+                    }, credits: {
+                        enabled: false
+                    },
+                    plotOptions: {
+                        spline: {
+                            marker: {
+                                enabled: false
+                            }
+                        },
+                        series: {
+                            cursor: 'pointer',
+                            point: {
+                                events: {
+                                    click: function () {
+                                        location.href = 'actualwalk.php?date=' + this.category + '&type=' + this.series.name + '&formSubmit=Submit';
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    title: {
+                        text: ' '
+                    },
+                    xAxis: {
+                        categories: [], labels: {
+                            rotation: -90,
+                            y: 25,
+                            align: 'right',
+                            step: 5,
+                            style: {
+                                fontSize: '12px',
+                                fontFamily: 'Verdana, sans-serif'
+                            }
+                        },
+                        legend: {
+                            y: "10",
+                            x: "5"
+                        }
+
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Average Feet per Pick'
+                        },
+                        plotLines: [{
+                                value: 0,
+                                width: 1,
+                                color: '#808080'
+                            }],
+                        opposite: true
+                    }, tooltip: {
+                        formatter: function () {
+                            return '<b>' + this.series.name + '</b><br/>' +
+                                    this.x + ': ' + Highcharts.numberFormat(this.y, 1);
+                        }
+                    },
+                    series: []
+                };
+                $.ajax({
+                    url: 'globaldata/dashboardgraph_actwalk.php',
+                    data: {"userid": userid},
+                    type: 'GET',
+                    dataType: 'json',
+                    async: 'true',
+                    success: function (json) {
+                        options7.xAxis.categories = json[0]['data'];
+                        options7.series[0] = json[1];
+                        options7.series[1] = json[2];
+                        options7.series[2] = json[3];
+
+
+                        chart = new Highcharts.Chart(options7);
+                        series = chart.series;
+                        $(window).resize();
+                    }
+                });
 
 
             });
