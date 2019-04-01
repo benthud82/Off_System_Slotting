@@ -9,6 +9,7 @@ $var_whse = $whssqlarray[0]['slottingDB_users_PRIMDC'];
 
 $today = date('Y-m-d');
 $month = date('m');
+$year = date('Y');
 
 
 
@@ -17,7 +18,7 @@ $hdr_movecountsql = $conn1->prepare("SELECT
                                                                                 FROM
                                                                                     slotting.itemsmoved_2018goal
                                                                                 WHERE
-                                                                                    MONTH(goal_movedate) = $month
+                                                                                    MONTH(goal_movedate) = $month and YEAR(goal_movedate) = $year
                                                                                         AND goal_whse = $var_whse;");
 $hdr_movecountsql->execute();
 $hdr_movecountsqlarray = $hdr_movecountsql->fetchAll(pdo::FETCH_ASSOC);
@@ -48,7 +49,7 @@ $hdr_yearincrease = $conn1->prepare("SELECT
                                                                                 AND goal_item = SCORE_ITEM
                                                                                 AND goal_pkgu = SCORE_PKGU
                                                                                 WHERE
-                                                                                        goal_whse = $var_whse;");
+                                                                                        goal_whse = $var_whse and YEAR(goal_movedate) = $year;");
 $hdr_yearincrease->execute();
 $hdr_yearincrease_array = $hdr_yearincrease->fetchAll(pdo::FETCH_ASSOC);
 $yearincrease= $hdr_yearincrease_array[0]['YEARTOTAL'];
@@ -81,7 +82,7 @@ $hdr_monthincrease = $conn1->prepare("SELECT
                                                                                 AND goal_item = SCORE_ITEM
                                                                                 AND goal_pkgu = SCORE_PKGU
                                                                                 WHERE
-                                                                                    MONTH(goal_movedate) = $month
+                                                                                    MONTH(goal_movedate) = $month and YEAR(goal_movedate) = $year
                                                                                         AND goal_whse = $var_whse;");
 $hdr_monthincrease->execute();
 $hdr_monthincrease_array = $hdr_monthincrease->fetchAll(pdo::FETCH_ASSOC);
