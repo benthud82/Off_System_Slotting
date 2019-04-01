@@ -9,6 +9,8 @@ $whssql = $conn1->prepare("SELECT slottingDB_users_PRIMDC from slotting.slotting
 $whssql->execute();
 $whssqlarray = $whssql->fetchAll(pdo::FETCH_ASSOC);
 
+$year = date('Y');
+
 $var_whse = $whssqlarray[0]['slottingDB_users_PRIMDC'];
 
 $result1 = $conn1->prepare("SELECT 
@@ -16,7 +18,7 @@ $result1 = $conn1->prepare("SELECT
                                                     FROM
                                                         slotting.itemsmoved_2018goal
                                                     WHERE
-                                                        goal_whse = $var_whse
+                                                        goal_whse = $var_whse and YEAR(goal_movedate) = $year
                                                     GROUP BY DATE_FORMAT(goal_movedate, '%Y-%m')
                                                     ORDER BY goal_movedate ASC");
 $result1->execute();
