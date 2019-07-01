@@ -54,7 +54,7 @@
                     </div>
                     <!--Move to NC tier-->
                     <div class="col-sm-6 col-md-4 col-lg-2"> 
-                        <section id="panel_nc_movein"class="panel text-center"> 
+                        <section id="panel_nc_movein"class="panel text-center" onclick="_tononcon();"> 
                             <div class="panel-body bg-info panel-hover"> 
                                 <div class="h4">Move to<br>Noncon Tier</div>
                                 <div class="line m-l m-r"></div> 
@@ -65,7 +65,7 @@
                     </div>
                     <!--Move out NC tier-->
                     <div class="col-sm-6 col-md-4 col-lg-2"> 
-                        <section id="panel_nc_moveout"class="panel text-center"> 
+                        <section id="panel_nc_moveout"class="panel text-center" onclick="_fromnoncon();"> 
                             <div class="panel-body bg-info panel-hover"> 
                                 <div class="h4">Move out of<br>Noncon Tier</div>
                                 <div class="line m-l m-r"></div> 
@@ -99,10 +99,8 @@
                                 </div>
                             </div>
                         </section>
-                    </div>
 
-                    <!--datatable for deck capacity-->
-                    <div class="col-xl-7">
+                        <!--datatable for deck capacity-->
                         <section class="panel hidewrapper hidden" id="section_deckcap" style="margin-bottom: 50px; margin-top: 20px;"> 
                             <header class="panel-heading bg bg-inverse h2">Tier C06 (Standard Deck) Location Listing</header>
                             <div id="tablepanel_deckcap" class="panel-body" style="background: #efefef">
@@ -123,10 +121,8 @@
                                 </div>
                             </div>
                         </section>
-                    </div>
 
-                    <!--datatable for pallet pkgu-->
-                    <div class="col-xl-7">
+                        <!--datatable for pallet pkgu-->
                         <section class="panel hidewrapper hidden" id="section_pallpkgu" style="margin-bottom: 50px; margin-top: 20px;"> 
                             <header class="panel-heading bg bg-inverse h2">Pallet Package Units Missing</header>
                             <div id="tablepanel_pallpkgu" class="panel-body" style="background: #efefef">
@@ -148,6 +144,55 @@
                                 </div>
                             </div>
                         </section>
+
+                        <!--datatable for move TO noncon-->
+                        <section class="panel hidewrapper hidden" id="section_tononcon" style="margin-bottom: 50px; margin-top: 20px;"> 
+                            <header class="panel-heading bg bg-inverse h2">Move Items TO Noncon Tier</header>
+                            <div id="tablepanel_tononcon" class="panel-body" style="background: #efefef">
+                                <div id="tablecontainer_tononcon" class="col-sm-12 ">
+                                    <table id="table_tononcon" class="table table-bordered" cellspacing="0" style="font-size: 11px; font-family: Calibri;  background-color:  white;">
+                                        <thead>
+                                            <tr>
+                                                <th>Item</th>
+                                                <th>Location</th>
+                                                <th>Current Tier</th>
+                                                <th>Case Pkgu</th>
+                                                <th>Case Length</th>
+                                                <th>Case Height</th>
+                                                <th>Case Width</th>
+                                                <th>Case Weight</th>
+                                                <th>Conveyable Flag</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!--datatable for move FROM noncon-->
+                        <section class="panel hidewrapper hidden" id="section_fromnoncon" style="margin-bottom: 50px; margin-top: 20px;"> 
+                            <header class="panel-heading bg bg-inverse h2">Move Items FROM Noncon Tier</header>
+                            <div id="tablepanel_fromnoncon" class="panel-body" style="background: #efefef">
+                                <div id="tablecontainer_fromnoncon" class="col-sm-12 ">
+                                    <table id="table_fromnoncon" class="table table-bordered" cellspacing="0" style="font-size: 11px; font-family: Calibri;  background-color:  white;">
+                                        <thead>
+                                            <tr>
+                                                <th>Item</th>
+                                                <th>Location</th>
+                                                <th>Current Tier</th>
+                                                <th>Case Pkgu</th>
+                                                <th>Case Length</th>
+                                                <th>Case Height</th>
+                                                <th>Case Width</th>
+                                                <th>Case Weight</th>
+                                                <th>Conveyable Flag</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </section>
+                    
                     </div>
 
                 </div>
@@ -268,6 +313,46 @@
                     "scrollX": true,
 
                     'sAjaxSource': "globaldata/casemonitor_pallpkgu.php",
+                    buttons: [
+                        'copyHtml5',
+                        'excelHtml5'
+                    ]
+                });
+            }
+
+            function _tononcon() {
+                $('#section_deckcap').addClass('hidden');
+                $('#section_fullpalletcap').addClass('hidden');
+                $('#section_pallpkgu').addClass('hidden');
+                $('#section_tononcon').removeClass('hidden');
+                $('#section_fromnoncon').addClass('hidden');
+                oTable = $('#table_tononcon').dataTable({
+                    dom: "<'row'<'col-sm-4 pull-left'l><'col-sm-4 text-center'B><'col-sm-4 pull-right'f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-4 pull-left'i><'col-sm-8 pull-right'p>>",
+                    destroy: true,
+                    "order": [[1, "desc"]],
+                    "scrollX": true,
+
+                    'sAjaxSource': "globaldata/casemonitor_tononcon.php",
+                    buttons: [
+                        'copyHtml5',
+                        'excelHtml5'
+                    ]
+                });
+            }
+
+            function _fromnoncon() {
+                $('#section_deckcap').addClass('hidden');
+                $('#section_fullpalletcap').addClass('hidden');
+                $('#section_pallpkgu').addClass('hidden');
+                $('#section_tononcon').addClass('hidden');
+                $('#section_fromnoncon').removeClass('hidden');
+                oTable = $('#table_fromnoncon').dataTable({
+                    dom: "<'row'<'col-sm-4 pull-left'l><'col-sm-4 text-center'B><'col-sm-4 pull-right'f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-4 pull-left'i><'col-sm-8 pull-right'p>>",
+                    destroy: true,
+                    "order": [[1, "desc"]],
+                    "scrollX": true,
+
+                    'sAjaxSource': "globaldata/casemonitor_fromnoncon.php",
                     buttons: [
                         'copyHtml5',
                         'excelHtml5'
