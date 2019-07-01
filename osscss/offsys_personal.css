@@ -939,5 +939,14 @@ ul> li > a > i{
 }
 
 table.dataTable tbody td {
-white-space: nowrap;
+    white-space: nowrap;
+}
+.panel-hover{
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.panel-hover:hover{
+    opacity: 1;
+    transition: opacity .25s ease-in-out;
 }
