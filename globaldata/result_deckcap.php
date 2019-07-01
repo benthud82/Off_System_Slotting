@@ -22,7 +22,7 @@ if ($var_whse == 32) {
 
 
 
-$sql_deckcount = $conn1->prepare("SELECT count(*) as DECKCOUNT FROM slotting.mysql_npflsm WHERE LMTIER = 'C06' and LMWHSE = $var_whse");
+$sql_deckcount = $conn1->prepare("SELECT count(*) as DECKCOUNT FROM slotting.mysql_npflsm WHERE LMTIER = 'C06' AND LMLOC not like 'Q%'  and LMWHSE = $var_whse");
 $sql_deckcount->execute();
 $array_deckcount = $sql_deckcount->fetchAll(pdo::FETCH_ASSOC);
 $deckcount_actual = $array_deckcount[0]['DECKCOUNT'];
