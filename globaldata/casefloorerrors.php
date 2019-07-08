@@ -4,7 +4,6 @@
 ini_set('max_execution_time', 99999);
 include_once '../connection/connection_details.php';
 
-$startdate = date("Y-m-d", strtotime('-30 days'));
 
 include '../sessioninclude.php';
 if (isset($_SESSION['MYUSER'])) {
@@ -16,20 +15,15 @@ if (isset($_SESSION['MYUSER'])) {
 }
 
 $locerror = $conn1->prepare("SELECT 
-                                                ' ',    
-                                                hist_loc
-                                                FROM
-                                                    printvis.hist_casevol
-                                                        LEFT JOIN
-                                                    slotting.case_floor_locs ON WHSE = hist_whse AND LOCATION = hist_loc
-                                                WHERE
-                                                    hist_whse = $var_whse
-                                                        AND predicted_availdate >= '$startdate'
-                                                        AND LOCATION IS NULL
-                                                        AND hist_loc NOT LIKE 'B%'
-                                                        AND hist_loc NOT LIKE 'I%'
-                                                        AND hist_loc NOT LIKE 'Y%'
-                                                GROUP BY hist_loc");
+                                                            ' ', LMLOC
+                                                        FROM
+                                                            slotting.mysql_npflsm
+                                                                LEFT JOIN
+                                                            slotting.case_floor_locs ON WHSE = LMWHSE AND LOCATION = LMLOC
+                                                        WHERE
+                                                            LMWHSE = $var_whse
+                                                                AND (LMLOC LIKE 'W%' OR LMLOC LIKE 'R%')
+                                                                AND LOCATION IS NULL");
 $locerror->execute();
 $locerror_array = $locerror->fetchAll(pdo::FETCH_ASSOC);
 
