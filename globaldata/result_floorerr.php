@@ -12,18 +12,15 @@ $startdate = date("Y-m-d", strtotime('-30 days'));
 
 
 $sql_floorerr = $conn1->prepare("SELECT 
-                                                                        COUNT(DISTINCT hist_loc) as LOCCOUNT
-                                                                    FROM
-                                                                        printvis.hist_casevol
-                                                                            LEFT JOIN
-                                                                        slotting.case_floor_locs ON WHSE = hist_whse AND LOCATION = hist_loc
-                                                                    WHERE
-                                                                        hist_whse = $var_whse
-                                                                            AND predicted_availdate >= '$startdate'
-                                                                            AND LOCATION IS NULL
-                                                                            AND hist_loc NOT LIKE 'B%'
-                                                                            AND hist_loc NOT LIKE 'I%'
-                                                                            AND hist_loc NOT LIKE 'Y%'
+                                                                COUNT(DISTINCT LMLOC) AS LOCCOUNT
+                                                            FROM
+                                                                slotting.mysql_npflsm
+                                                                    LEFT JOIN
+                                                                slotting.case_floor_locs ON WHSE = LMWHSE AND LOCATION = LMLOC
+                                                            WHERE
+                                                                LMWHSE = 7
+                                                                    AND (LMLOC LIKE 'W%' OR LMLOC LIKE 'R%')
+                                                                    AND LOCATION IS NULL
 ");
 $sql_floorerr->execute();
 $array_floorerr = $sql_floorerr->fetchAll(pdo::FETCH_ASSOC);
