@@ -4,7 +4,8 @@
     <head>
         <title>Help</title>
         <?php
-        // include_once 'headerincludes.php'; 
+        //include_once 'headerincludes.php'; 
+         include_once 'connection/connection_details.php';
         include 'sessioninclude.php';
         ?>
         <meta charset="utf-8">
