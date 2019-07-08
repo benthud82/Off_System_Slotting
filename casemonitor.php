@@ -74,11 +74,24 @@
                             </div>
                         </section> 
                     </div>
+                    <!--Case Floor Errors-->
+                    <div class="col-sm-6 col-md-4 col-lg-2"> 
+                        <section id="panel_floorerr_head"class="panel text-center" onclick="_floorerr();"> 
+                            <div class="panel-body bg-info panel-hover"> 
+                                <div class="h4">Case Floor<br>Errors</div>
+                                <div class="line m-l m-r"></div> 
+                                <!--Result div-->
+                                <div id="result_floorerr" class="h4"></div>
+                            </div>
+                        </section> 
+                    </div>
                 </div>
                 <div class="row" style="margin-top: 75px">
 
-                    <!--datatable for full pallet capacity-->
-                    <div class="col-xl-7">
+                    <!--All datatables-->
+                    <div class="col-sm-12">
+
+                        <!--datatable for full pallet capacity-->
                         <section class="panel hidewrapper hidden" id="section_fullpalletcap" style="margin-bottom: 50px; margin-top: 20px;"> 
                             <header class="panel-heading bg bg-inverse h2">Tier C03 (Standard Full Pallet) Location Listing</header>
                             <div id="tablepanel_fullpallet" class="panel-body" style="background: #efefef">
@@ -192,7 +205,43 @@
                                 </div>
                             </div>
                         </section>
-                    
+
+                        <!--datatable for floor errors-->
+                        <section id="allfloorerr" class="hidden">
+                            <div class="col-lg-4 col-md-6">
+                                <section class="panel hidewrapper " id="section_floorerr" > 
+                                    <header class="panel-heading bg bg-danger h2">Table - Case Floor Errors</header>
+                                    <div id="panel_floorerr" class="panel-body">
+                                        <table id="tbl_floorerr" class="table table-bordered" cellspacing="0" style="font-size: 11px; font-family: Calibri; cursor: pointer;">
+                                            <thead>
+                                                <tr>
+                                                    <th>Add Location</th>
+                                                    <th>Location</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </section>
+                            </div>
+                            <!--All Floor Loc Data-->
+                            <div class="col-lg-8 col-md-12">
+                                <section class="panel hidewrapper " id="section_floorlocs_all" > 
+                                    <header class="panel-heading bg bg-inverse h2">Table - All Floor Locations</header>
+                                    <div id="panel_floorlocs_all" class="panel-body">
+                                        <table id="tbl_floorlocs_all" class="table table-bordered" cellspacing="0" style="font-size: 11px; font-family: Calibri; cursor: pointer;">
+                                            <thead>
+                                                <tr>
+                                                    <th>Modify Location</th>
+                                                    <th>Location</th>
+                                                    <th>Primary?</th>
+                                                    <th>Floor?</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </section>
+                            </div>
+                        </section>
                     </div>
 
                 </div>
@@ -257,8 +306,19 @@
                         $("#result_nc_moveout").html(ajaxresult);
                     }
                 });
-            });
 
+                //ajax for move to floor errors
+                $.ajax({
+                    url: 'globaldata/result_floorerr.php', //url for the ajax.  Variable numtype is either salesplan, billto, shipto
+                    data: {userid: userid}, //pass salesplan, billto, shipto all through billto
+                    type: 'POST',
+                    dataType: 'html',
+                    success: function (ajaxresult) {
+                        $("#result_floorerr").html(ajaxresult);
+                    }
+                });
+            });
+            $("#modules").addClass('active');
 
             function _fullpalletcap() {
                 $('#section_fullpalletcap').removeClass('hidden');
@@ -266,6 +326,7 @@
                 $('#section_pallpkgu').addClass('hidden');
                 $('#section_tononcon').addClass('hidden');
                 $('#section_fromnoncon').addClass('hidden');
+                $('#allfloorerr').addClass('hidden');
                 oTable = $('#table_fullpallcap').dataTable({
                     dom: "<'row'<'col-sm-4 pull-left'l><'col-sm-4 text-center'B><'col-sm-4 pull-right'f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-4 pull-left'i><'col-sm-8 pull-right'p>>",
                     destroy: true,
@@ -286,6 +347,7 @@
                 $('#section_pallpkgu').addClass('hidden');
                 $('#section_tononcon').addClass('hidden');
                 $('#section_fromnoncon').addClass('hidden');
+                $('#allfloorerr').addClass('hidden');
                 oTable = $('#table_deckcap').dataTable({
                     dom: "<'row'<'col-sm-4 pull-left'l><'col-sm-4 text-center'B><'col-sm-4 pull-right'f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-4 pull-left'i><'col-sm-8 pull-right'p>>",
                     destroy: true,
@@ -306,6 +368,7 @@
                 $('#section_pallpkgu').removeClass('hidden');
                 $('#section_tononcon').addClass('hidden');
                 $('#section_fromnoncon').addClass('hidden');
+                $('#allfloorerr').addClass('hidden');
                 oTable = $('#table_pallpkgu').dataTable({
                     dom: "<'row'<'col-sm-4 pull-left'l><'col-sm-4 text-center'B><'col-sm-4 pull-right'f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-4 pull-left'i><'col-sm-8 pull-right'p>>",
                     destroy: true,
@@ -326,6 +389,7 @@
                 $('#section_pallpkgu').addClass('hidden');
                 $('#section_tononcon').removeClass('hidden');
                 $('#section_fromnoncon').addClass('hidden');
+                $('#allfloorerr').addClass('hidden');
                 oTable = $('#table_tononcon').dataTable({
                     dom: "<'row'<'col-sm-4 pull-left'l><'col-sm-4 text-center'B><'col-sm-4 pull-right'f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-4 pull-left'i><'col-sm-8 pull-right'p>>",
                     destroy: true,
@@ -346,6 +410,7 @@
                 $('#section_pallpkgu').addClass('hidden');
                 $('#section_tononcon').addClass('hidden');
                 $('#section_fromnoncon').removeClass('hidden');
+                $('#allfloorerr').addClass('hidden');
                 oTable = $('#table_fromnoncon').dataTable({
                     dom: "<'row'<'col-sm-4 pull-left'l><'col-sm-4 text-center'B><'col-sm-4 pull-right'f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-4 pull-left'i><'col-sm-8 pull-right'p>>",
                     destroy: true,
@@ -360,10 +425,198 @@
                 });
             }
 
+            function _floorerr() {
+                $('#section_deckcap').addClass('hidden');
+                $('#section_fullpalletcap').addClass('hidden');
+                $('#section_pallpkgu').addClass('hidden');
+                $('#section_tononcon').addClass('hidden');
+                $('#section_fromnoncon').addClass('hidden');
+                $('#allfloorerr').removeClass('hidden');
+                oTable = $('#tbl_floorerr').dataTable({
+                    dom: "<'row'<'col-sm-4 pull-left'l><'col-sm-4 text-center'B>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-4 pull-left'i><'col-sm-8 pull-right'p>>",
+                    destroy: true,
+                    "order": [[1, "asc"]],
+                    "scrollX": true,
+                    'sAjaxSource': "globaldata/casefloorerrors.php",
+                    "fnCreatedRow": function (nRow, aData, iDataIndex) {
+                        $('td:eq(0)', nRow).append("<div class='text-center'><i class='fa fa-plus-circle clickaddlocation' style='cursor: pointer;' data-toggle='tooltip' data-title='Add Location' data-placement='top' data-container='body'></i></div>");
+                    },
+                    buttons: [
+                        'copyHtml5',
+                        'excelHtml5'
+                    ]
+                });
+
+
+                oTable3 = $('#tbl_floorlocs_all').DataTable({
+                    dom: "<'row'<'col-sm-4 pull-left'l><'col-sm-4 text-center'B><'col-sm-4 pull-right'f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-4 pull-left'i><'col-sm-8 pull-right'p>>",
+                    destroy: true,
+                    "scrollX": true,
+                    'sAjaxSource': "globaldata/casefloorall.php",
+                    "fnCreatedRow": function (nRow, aData, iDataIndex) {
+                        $('td:eq(0)', nRow).append("<div class='text-center'><i class='fa fa-edit clickmodifylocation' style='cursor: pointer;' data-toggle='tooltip' data-title='Modify Location' data-placement='top' data-container='body'></i></div>");
+                    },
+                    buttons: [
+                        'copyHtml5',
+                        'excelHtml5'
+                    ]
+                });
+
+            }
+
+            //jquery to show modal to add location error
+            $(document).on("click", ".clickaddlocation", function (e) {
+                $('#addlocationmodal').modal('toggle');
+                $('#add_loc').val($(this).closest('tr').find('td:eq(1)').text());
+            });
+
+            //jquery to show modal to modify current location
+            $(document).on("click", ".clickmodifylocation", function (e) {
+                $('#modifylocmodal').modal('toggle');
+                $('#mod_loc').val($(this).closest('tr').find('td:eq(1)').text());
+                $('#mod_prim').val($(this).closest('tr').find('td:eq(2)').text());
+                $('#mod_floor').val($(this).closest('tr').find('td:eq(3)').text());
+            });
+
+            //jquery to show modal to add vector map settings
+            $(document).on("click", "#addfloorbtn", function (e) {
+                $('#addlocationmodal').modal('toggle');
+            });
+
+            //post add location
+            $(document).on("click", "#submitaddloc", function (event) {
+                event.preventDefault();
+                var location = $('#add_loc').val();
+                var prim = $('#add_prim').val();
+                var floor = $('#add_floor').val();
+                var formData = 'location=' + location + '&prim=' + prim + '&floor=' + floor;
+                $.ajax({
+                    url: 'formpost/postfloorlocadd.php',
+                    type: 'POST',
+                    data: formData,
+                    success: function (result) {
+                        $('#addlocationmodal').modal('hide');
+                        $('#tbl_floorerr').DataTable().ajax.reload();
+                    }
+                });
+            });
+
+            //post modify location
+            $(document).on("click", "#submitmodloc", function (event) {
+                event.preventDefault();
+                var location = $('#mod_loc').val();
+                var prim = $('#mod_prim').val();
+                var floor = $('#mod_floor').val();
+                var formData = 'location=' + location + '&prim=' + prim + '&floor=' + floor;
+                $.ajax({
+                    url: 'formpost/postfloorlocmod.php',
+                    type: 'POST',
+                    data: formData,
+                    success: function (result) {
+                        $('#modifylocmodal').modal('hide');
+                        $('#tbl_floorlocs_all').DataTable().ajax.reload();
+                    }
+                });
+            });
+
+            $('.modal').on('hidden.bs.modal', function () {
+                $(this).find('form')[0].reset();
+            });
+
         </script>
 
-        <script>
-            $("#modules").addClass('active');
-        </script>
+        <!-- Modify Location Floor -->
+        <div id="modifylocmodal" class="modal fade " role="dialog">
+            <div class="modal-dialog modal-lg">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Modify Floor Location Data</h4>
+                    </div>
+                    <form class="form-horizontal" id="postmodifylocation">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Location</label>
+                                <div class="col-sm-3">
+                                    <input type="text" name="mod_loc" id="mod_loc" class="form-control" placeholder="" tabindex="1" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Primary?</label>
+                                <div class="col-sm-3">
+                                    <select class="" id="mod_prim" name="mod_prim" style="width: 175px;padding: 5px; margin-right: 10px;">
+                                        <option value="Y">YES</option>
+                                        <option value="N">NO</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Floor?</label>
+                                <div class="col-sm-3">
+                                    <select class="" id="mod_floor" name="mod_floor" style="width: 175px;padding: 5px; margin-right: 10px;">
+                                        <option value="Y">YES</option>
+                                        <option value="N">NO</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="">
+                                <button type="submit" class="btn btn-primary btn-lg pull-left" name="submitaddloc" id="submitmodloc">Modify Floor Location</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Location Floor-->
+        <div id="addlocationmodal" class="modal fade " role="dialog">
+            <div class="modal-dialog modal-lg">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Add Floor Location Data</h4>
+                    </div>
+                    <form class="form-horizontal" id="postaddlocation">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Location</label>
+                                <div class="col-sm-3">
+                                    <input type="text" name="add_loc" id="add_loc" class="form-control" placeholder="" tabindex="1" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Primary?</label>
+                                <div class="col-sm-3">
+                                    <select class="" id="add_prim" name="add_prim" style="width: 175px;padding: 5px; margin-right: 10px;">
+                                        <option value="P">YES</option>
+                                        <option value=" ">NO</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Floor?</label>
+                                <div class="col-sm-3">
+                                    <select class="" id="add_floor" name="add_floor" style="width: 175px;padding: 5px; margin-right: 10px;">
+                                        <option value="Y">YES</option>
+                                        <option value="N">NO</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="">
+                                <button type="submit" class="btn btn-primary btn-lg pull-left" name="submitaddloc" id="submitaddloc">Add Floor Location</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </body>
 </html>
