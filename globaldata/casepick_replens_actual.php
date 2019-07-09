@@ -15,7 +15,7 @@ $table = 'slotting.' . ($var_whse) . 'moves';
 $time = strtotime("-1 year", time());
 $date = date("Y-m-d", $time);
 
-$result1 = $conn1->prepare("SELECT MVDATE, COUNT(1) as TOTCOUNT FROM {$table} LEFT JOIN slotting.excl_replenphistorical on  MVDATE = replenexcl_date and replenexcl_whse = $var_whse  WHERE MVDATE >= '$date' and  replenexcl_date is null  GROUP BY MVDATE ");
+$result1 = $conn1->prepare("SELECT MVDATE, COUNT(1) as TOTCOUNT FROM {$table} LEFT JOIN slotting.excl_replenphistorical on  MVDATE = replenexcl_date and replenexcl_whse = $var_whse  WHERE MVDATE >= '$date' and  replenexcl_date is null  and MVTZNE between 7 and 8 GROUP BY MVDATE ");
 $result1->execute();
 
 $result2 = $conn1->prepare("SELECT 
