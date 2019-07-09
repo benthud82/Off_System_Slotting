@@ -3,6 +3,7 @@
 include_once '../sessioninclude.php';
 include_once '../connection/connection_details.php';
 include_once '../../globalincludes/usa_asys.php';
+include_once '../../globalincludes/newcanada_asys.php';
 include_once '../../globalfunctions/custdbfunctions.php';
 
 ini_set('max_execution_time', 99999);
@@ -11,6 +12,14 @@ $whssql = $conn1->prepare("SELECT slottingDB_users_PRIMDC from slotting.slotting
 $whssql->execute();
 $whssqlarray = $whssql->fetchAll(pdo::FETCH_ASSOC);
 $var_whse = $whssqlarray[0]['slottingDB_users_PRIMDC'];
+
+if($var_whse == 11 || $var_whse == 12 || $var_whse == 16){
+    $connection = $aseriesconn_can;
+    $schematable = 'A.ARCPCORDTA.NPFMVE';
+} else{
+    $connection = $aseriesconn;
+    $schematable = 'A.HSIPCORDTA.NPFMVE';
+}
 
 
 $startdate = $_GET['startdate'];
@@ -30,7 +39,7 @@ if ($movetype == 'ASOs') {
 }
 
 
-$movedata = $aseriesconn->prepare("SELECT MVTITM,
+$movedata = $connection->prepare("SELECT MVTITM,
                                                                     MVFLC#, 
                                                                     MVTLC#, 
                                                                     MVTYPE, 
@@ -39,7 +48,7 @@ $movedata = $aseriesconn->prepare("SELECT MVTITM,
                                                                     MVREQT, MVREQQ, date(substr(MVCNFD,1,4) || '-' || substr(MVCNFD,5,2) || '-' || substr(MVCNFD,7,2)) as CNFDATE, 
                                                                     MVCNFT, 
                                                                     MVCNFQ  
-                                                                FROM A.HSIPCORDTA.NPFMVE 
+                                                                FROM $schematable
                                                                 WHERE MVWHSE =  $var_whse and 
                                                                     (MVTPKG <> 0) and 
                                                                     MVCNFQ <> 0 and 

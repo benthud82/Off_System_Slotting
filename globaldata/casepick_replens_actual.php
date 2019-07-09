@@ -15,19 +15,26 @@ $table = 'slotting.' . ($var_whse) . 'moves';
 $time = strtotime("-1 year", time());
 $date = date("Y-m-d", $time);
 
-$result1 = $conn1->prepare("SELECT MVDATE, COUNT(1) as TOTCOUNT FROM {$table} LEFT JOIN slotting.excl_replenphistorical on  MVDATE = replenexcl_date and replenexcl_whse = $var_whse  WHERE MVDATE >= '$date' and  replenexcl_date is null  and MVTZNE between 7 and 8 GROUP BY MVDATE ");
+$result1 = $conn1->prepare("SELECT 
+                                                        MVDATE,
+                                                        slottingscore_hist_CURRCSEMOVES,
+                                                        COUNT(1) AS TOTCOUNT
+                                                    FROM
+                                                        $table
+                                                            JOIN
+                                                        slotting.slottingscore_hist ON slottingscore_hist_DATE = MVDATE
+                                                            LEFT JOIN
+                                                        slotting.excl_replenphistorical ON MVDATE = replenexcl_date
+                                                            AND replenexcl_whse = $var_whse
+                                                    WHERE
+                                                        MVDATE >= '$date'
+                                                            AND replenexcl_date IS NULL
+                                                            AND MVTZNE BETWEEN 7 AND 8
+                                                            AND slottingscore_hist_WHSE = $var_whse
+                                                    GROUP BY MVDATE , slottingscore_hist_CURRCSEMOVES");
 $result1->execute();
 
-$result2 = $conn1->prepare("SELECT 
-                                                        SUM(CURRENT_IMPMOVES) AS CURRMOVES
-                                                    FROM
-                                                        slotting.my_npfmvc_cse
-                                                    WHERE
-                                                        WAREHOUSE = $var_whse");
-$result2->execute();
-foreach ($result2 as $row) {
-    $predictedmoves = intval($row['CURRMOVES']);
-}
+
 $rows = array();
 $rows['name'] = 'Date';
 $rows1 = array();
@@ -39,7 +46,7 @@ $rows2['name'] = 'Predicted Replens';
 foreach ($result1 as $row) {
     $rows['data'][] = $row['MVDATE'];
     $rows1['data'][] = intval($row['TOTCOUNT']);
-    $rows2['data'][] = $predictedmoves;
+    $rows2['data'][] = intval($row['slottingscore_hist_CURRCSEMOVES']);
 }
 
 
