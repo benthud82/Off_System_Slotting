@@ -28,7 +28,7 @@ $sql_equippicks = $conn1->prepare("SELECT
                                                                 FROM
                                                                     printvis.casedash_equippicks
                                                                 WHERE
-                                                                    equippicks_whse = 7
+                                                                    equippicks_whse = $var_whse
                                                                     and equippicks_date >= '$startdate' and equippicks_date < '$currentdate'");
 $sql_equippicks->execute();
 $array_equippicks = $sql_equippicks->fetchAll(pdo::FETCH_ASSOC);
