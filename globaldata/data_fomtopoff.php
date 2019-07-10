@@ -68,12 +68,12 @@ if (in_array($var_whse, $USAarray)) {
 
 
     #Query the Database into a result set - 
-    $result = $aseriesconn_can->prepare("SELECT LOWHSE as WHSE, LOITEM as ITEM, LOLOC# as LOCATION, LOPKGU as PKGU, LOONHD - LOPRTA + LOPMTQ as ONHAND, LOMINC as LOCMIN, LOMAXC as LOCMAX, VCFTIR as TIER, VCGRD5 as GRID5, WRSROH - LOPMTQ as RESOH, VCCLAS as ITEMMC, LOWHSE||LOITEM||CASE WHEN VCFTIR like 'C%' then 'CSE' else 'LSE' end || LOPKGU as KEYValue FROM A.HSIPCORDTA.NPFLOC, A.HSIPCORDTA.NPFMVC,  A.HSIPCORDTA.NPFWRS WHERE LOLOC# = VCLOC# and LOWHSE = VCWHSE and LOWHSE = WRSWHS and WRSITM = VCITEM and WRSITM = LOITEM and LOITEM not in (select LTITEM from A.HSIPCORDTA.NPFLOT where LTFLAG <> '') and LOITEM not in (select LMITEM from A.HSIPCORDTA.NPFLSM where LMSLR# = '2' and LMWHSE = $var_whse) and VCWHSE = $var_whse and WRSROH - LOPMTQ > 0 and VCCLAS = '" . $mc . "' and VCFTIR = '" . $tier . "'");
+    $result = $aseriesconn_can->prepare("SELECT LOWHSE as WHSE, LOITEM as ITEM, LOLOC# as LOCATION, LOPKGU as PKGU, LOONHD - LOPRTA + LOPMTQ as ONHAND, LOMINC as LOCMIN, LOMAXC as LOCMAX, VCFTIR as TIER, VCGRD5 as GRID5, WRSROH - LOPMTQ as RESOH, VCCLAS as ITEMMC, LOWHSE||LOITEM||CASE WHEN VCFTIR like 'C%' then 'CSE' else 'LSE' end || LOPKGU as KEYValue FROM A.ARCPCORDTA.NPFLOC, A.ARCPCORDTA.NPFMVC,  A.ARCPCORDTA.NPFWRS WHERE LOLOC# = VCLOC# and LOWHSE = VCWHSE and LOWHSE = WRSWHS and WRSITM = VCITEM and WRSITM = LOITEM and LOITEM not in (select LTITEM from A.ARCPCORDTA.NPFLOT where LTFLAG <> '') and LOITEM not in (select LMITEM from A.ARCPCORDTA.NPFLSM where LMSLR# = '2' and LMWHSE = $var_whse) and VCWHSE = $var_whse and WRSROH - LOPMTQ > 0 and VCCLAS = '" . $mc . "' and VCFTIR = '" . $tier . "'");
     $result->execute();
     $resultsetarray = $result->fetchAll(PDO::FETCH_NUM);
 
     //determine whether B or W location.  Take min of location with distinct item so only one reserve is returned
-    $result2 = $aseriesconn_can->prepare("SELECT DISTINCT LOITEM as KEYValue, min(LOLOC#) as LOC FROM A.HSIPCORDTA.NPFLOC WHERE LOSCDE = 'R'  and LOMAXC = 0 and LOONHD - LOPMTQ > 0 and LOWHSE = $var_whse and LOITEM not in (select LTITEM from A.HSIPCORDTA.NPFLOT where LTFLAG <> '') and LOITEM not in (select LMITEM from A.HSIPCORDTA.NPFLSM where LMSLR# = '2' and LMWHSE = $var_whse) GROUP BY LOITEM");
+    $result2 = $aseriesconn_can->prepare("SELECT DISTINCT LOITEM as KEYValue, min(LOLOC#) as LOC FROM A.ARCPCORDTA.NPFLOC WHERE LOSCDE = 'R'  and LOMAXC = 0 and LOONHD - LOPMTQ > 0 and LOWHSE = $var_whse and LOITEM not in (select LTITEM from A.ARCPCORDTA.NPFLOT where LTFLAG <> '') and LOITEM not in (select LMITEM from A.ARCPCORDTA.NPFLSM where LMSLR# = '2' and LMWHSE = $var_whse) GROUP BY LOITEM");
     $result2->execute();
     $reserveresultsetarray = $result2->fetchAll(PDO::FETCH_ASSOC);
 }
