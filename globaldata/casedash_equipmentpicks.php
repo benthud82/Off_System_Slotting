@@ -17,40 +17,19 @@ if (isset($_SESSION['MYUSER'])) {
 }
 
 $sql_equippicks = $conn1->prepare("SELECT 
-    predicted_availdate,
-    SUM(CASE
-        WHEN hist_equip = 'ORDERPICKER' THEN 1
-        ELSE 0
-    END) AS CURR_OP,
-    SUM(CASE
-        WHEN SUGG_EQUIP = 'ORDERPICKER' THEN 1
-        ELSE 0
-    END) AS SUGG_OP,
-    SUM(CASE
-        WHEN hist_equip = 'BELTLINE' THEN 1
-        ELSE 0
-    END) AS CURR_PTB,
-    SUM(CASE
-        WHEN SUGG_EQUIP = 'BELTLINE' THEN 1
-        ELSE 0
-    END) AS SUGG_PTB,
-    SUM(CASE
-        WHEN hist_equip = 'PALLETJACK' THEN 1
-        ELSE 0
-    END) AS CURR_PJ,
-    SUM(CASE
-        WHEN SUGG_EQUIP = 'PALLETJACK' THEN 1
-        ELSE 0
-    END) AS SUGG_PJ
-FROM
-    printvis.hist_casevol
-         JOIN
-    slotting.my_npfmvc_cse ON hist_whse = WAREHOUSE
-        AND hist_item = ITEM_NUMBER
-WHERE
-    hist_whse = 7
-    and predicted_availdate >= '$startdate' and predicted_availdate < '$currentdate'
-GROUP BY predicted_availdate");
+                                                                    equippicks_date,
+                                                                    equippicks_currop,
+                                                                    equippicks_suggop,
+                                                                    equippicks_currptb,
+                                                                    equippicks_suggptb,
+                                                                    equippicks_currpj,
+                                                                    equippicks_suggpj,
+                                                                    equippicks_hourred
+                                                                FROM
+                                                                    printvis.casedash_equippicks
+                                                                WHERE
+                                                                    equippicks_whse = 7
+                                                                    and equippicks_date >= '$startdate' and equippicks_date < '$currentdate'");
 $sql_equippicks->execute();
 $array_equippicks = $sql_equippicks->fetchAll(pdo::FETCH_ASSOC);
 
@@ -62,18 +41,14 @@ $row = array();
 
 foreach ($array_equippicks as $key => $value) {
 
-    $predicted_availdate = $array_equippicks[$key]['predicted_availdate'];
-    $CURR_OP = $array_equippicks[$key]['CURR_OP'];
-    $SUGG_OP = $array_equippicks[$key]['SUGG_OP'];
-    $CURR_PTB = $array_equippicks[$key]['CURR_PTB'];
-    $SUGG_PTB = $array_equippicks[$key]['SUGG_PTB'];
-    $CURR_PJ = $array_equippicks[$key]['CURR_PJ'];
-    $SUGG_PJ = $array_equippicks[$key]['SUGG_PJ'];
-
-    $timedif = number_format((($CURR_OP / 80) + ($CURR_PTB / 200) + ($CURR_PJ / 110)) - (($SUGG_OP / 80) + ($SUGG_PTB / 200) + ($SUGG_PJ / 110)), 2);
-
-
-
+    $predicted_availdate = $array_equippicks[$key]['equippicks_date'];
+    $CURR_OP = $array_equippicks[$key]['equippicks_currop'];
+    $SUGG_OP = $array_equippicks[$key]['equippicks_suggop'];
+    $CURR_PTB = $array_equippicks[$key]['equippicks_currptb'];
+    $SUGG_PTB = $array_equippicks[$key]['equippicks_suggptb'];
+    $CURR_PJ = $array_equippicks[$key]['equippicks_currpj'];
+    $SUGG_PJ = $array_equippicks[$key]['equippicks_suggpj'];
+    $timedif = $array_equippicks[$key]['equippicks_hourred'];
     $rowpush = array($predicted_availdate, $CURR_OP, $SUGG_OP, $CURR_PTB, $SUGG_PTB, $CURR_PJ, $SUGG_PJ, $timedif);
     $row[] = array_values($rowpush);
 }
