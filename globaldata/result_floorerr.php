@@ -18,7 +18,7 @@ $sql_floorerr = $conn1->prepare("SELECT
                                                                     LEFT JOIN
                                                                 slotting.case_floor_locs ON WHSE = LMWHSE AND LOCATION = LMLOC
                                                             WHERE
-                                                                LMWHSE = 7
+                                                                LMWHSE = $var_whse
                                                                     AND (LMLOC LIKE 'W%' OR LMLOC LIKE 'R%')
                                                                     AND LOCATION IS NULL
 ");
