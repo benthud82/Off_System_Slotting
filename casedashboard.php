@@ -10,7 +10,9 @@
         ?>
 
     </head>
-
+    <script src="../app.min.js" type="text/javascript"></script>
+    <script src="../jquery.counterup.min.js" type="text/javascript"></script>
+    <script src="../jquery.waypoints.min.js" type="text/javascript"></script>
     <body style="">
         <!--include horz nav php file-->
         <?php include_once 'horizontalnav.php'; ?>
@@ -20,10 +22,34 @@
 
         <section id="content"> 
             <section class="main padder" style="padding-top: 75px;"> 
-
+                <div id="title" class="h2">Case Pick Dashboard</div>
+                <!--Header info Stats-->
+                <div id="headerstats"></div>
+                
+                <!--Case Moves by Date Highchart-->
+                <div class="col-sm-12">
+                    <section class="panel hidewrapper" id="graph_historicalreplens_actual" style="margin-bottom: 50px; margin-top: 20px;"> 
+                        <header class="panel-heading bg bg-inverse h2">Historical Completed Case Replens</header>
+                        <div id="historicalreplens_actual" class="panel-body" style="background: #efefef">
+                            <div id="chartpage_replen_actual"  class="page-break" style="width: 100%">
+                                <div id="charts padded">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="alert alert-info " style="font-size: 100%;"> <button type="button" class="close" data-dismiss="alert"><i class="fa fa-times"></i></button> <i class="fa fa-info-circle fa-lg"></i><span> Actual replenishments <strong>COMPLETED</strong> by <strong>REQUESTED </strong>date. Move must be completed before it will be recorded.</span></div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="alert alert-success" style="font-size: 100%;"> <button type="button" class="close" data-dismiss="alert"><i class="fa fa-times"></i></button> <i class="fa fa-arrow-down fa-lg"></i><span> Positive improvement indicated by <strong>downward</strong> trending graph. </span></div>
+                                        </div>
+                                    </div>
+                                    <div id="container_replens_actual" class="dashboardstyle printrotate"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                
                 <!--Picking Equipment Analysis-->
                 <div class="col-sm-12">
-
                     <!--datatable for equipment by day-->
                     <section class="panel hidewrapper " id="section_dt_equipment" style="margin-bottom: 50px; margin-top: 20px;"> 
                         <header class="panel-heading bg bg-inverse h2">Picks by Equipment</header>
@@ -47,29 +73,7 @@
                         </div>
                     </section>
                 </div>
-
-                <!--Case Moves by Date Highchart-->
-                <div class="col-sm-12">
-                    <section class="panel hidewrapper" id="graph_historicalreplens_actual" style="margin-bottom: 50px; margin-top: 20px;"> 
-                        <header class="panel-heading bg bg-inverse h2">Historical Completed Case Replens<i class="fa fa-close pull-right closehidden" style="cursor: pointer;" id="close_replengraph_actual"></i><i class="fa fa-chevron-up pull-right clicktotoggle-chevron" style="cursor: pointer;"></i></header>
-                        <div id="historicalreplens_actual" class="panel-body" style="background: #efefef">
-                            <div id="chartpage_replen_actual"  class="page-break" style="width: 100%">
-                                <div id="charts padded">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="alert alert-info " style="font-size: 100%;"> <button type="button" class="close" data-dismiss="alert"><i class="fa fa-times"></i></button> <i class="fa fa-info-circle fa-lg"></i><span> Actual replenishments <strong>COMPLETED</strong> by <strong>REQUESTED </strong>date. Move must be completed before it will be recorded.</span></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="alert alert-success" style="font-size: 100%;"> <button type="button" class="close" data-dismiss="alert"><i class="fa fa-times"></i></button> <i class="fa fa-arrow-down fa-lg"></i><span> Positive improvement indicated by <strong>downward</strong> trending graph. </span></div>
-                                        </div>
-                                    </div>
-                                    <div id="container_replens_actual" class="dashboardstyle printrotate"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-
+                
             </section>
         </section>
 
@@ -78,21 +82,41 @@
             $("body").tooltip({selector: '[data-toggle="tooltip"]'});
             $("#help").addClass('active');
             $(document).ready(function () {
+
+            //call headerstats function
+            headerdata();
+                
                 oTable = $('#table_dt_equipment').dataTable({
                     dom: "<'row'<'col-sm-4 pull-left'l><'col-sm-4 text-center'B><'col-sm-4 pull-right'f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-4 pull-left'i><'col-sm-8 pull-right'p>>",
                     destroy: true,
                     "order": [[0, "desc"]],
                     "scrollX": true,
-                    "aoColumnDefs": [
-                        {"sClass": "lightgray", "aTargets": [1, 2, 5, 6]}
-                    ],
+//                    "aoColumnDefs": [
+//                        {"sClass": "lightgray", "aTargets": [1, 2, 5, 6]}
+//                    ],
+                                        "rowCallback": function (row, data, index) {
+                        if (data[1] >= 0) {
+                             $('td', row).eq(1).addClass('lightgray');
+                        }
+                        if (data[2] >= 0) {
+                             $('td', row).eq(2).addClass('lightgray');
+                        }
+                        if (data[5] >= 0) {
+                             $('td', row).eq(5).addClass('lightgray');
+                        }
+                        if (data[6] >= 0) {
+                             $('td', row).eq(6).addClass('lightgray');
+                        }
+                        if (data[7] >= 0) {
+                             $('td', row).eq(7).addClass('cellshade_blue');
+                        }
+                    },
                     'sAjaxSource': "globaldata/casedash_equipmentpicks.php",
                     buttons: [
                         'copyHtml5',
                         'excelHtml5'
                     ]
                 });
-
 
                 //options for actual replens highchart
                 var options3 = {
@@ -155,7 +179,7 @@
                     }, tooltip: {
                         formatter: function () {
                             return '<b>' + this.series.name + '</b><br/>' +
-                                    this.x + ': ' + Highcharts.numberFormat(this.y, 0) ;
+                                    this.x + ': ' + Highcharts.numberFormat(this.y, 0);
                         }
                     },
                     series: []
@@ -170,7 +194,7 @@
                         options3.series[0] = json[1];
                         options3.series[1] = json[2];
                         options3.series[1] = json[2];
-                        options3.series[1].dashStyle= 'longdash';
+                        options3.series[1].dashStyle = 'longdash';
 
                         chart = new Highcharts.Chart(options3);
                         series = chart.series;
@@ -178,6 +202,22 @@
                     }
                 });
             });
+                                        
+            //Data pull to refresh header case data
+            function headerdata() {
+                $.ajax({
+                    url: 'globaldata/headerdata_casedash.php',
+                    type: 'POST',
+                    dataType: 'html',
+                    success: function (ajaxresult) {
+                        $("#headerstats").html(ajaxresult);
+                        $('.yestreturns').counterUp({
+                            delay: 100,
+                            time: 1200
+                        });
+                    }
+                });
+            }
         </script>
 
     </body>

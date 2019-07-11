@@ -950,3 +950,8 @@ table.dataTable tbody td {
     opacity: 1;
     transition: opacity .25s ease-in-out;
 }
+
+
+    .cellshade_blue{
+        background-color: #d1dffd !important;
+    }
