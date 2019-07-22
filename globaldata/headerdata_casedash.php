@@ -18,7 +18,7 @@ $sql_hourred = $conn1->prepare("SELECT
                                                             FROM
                                                                 printvis.casedash_equippicks
                                                             WHERE
-                                                                equippicks_whse = $var_whse
+                                                                equippicks_whse = $var_whse and equippicks_build = $build
                                                                     AND equippicks_date BETWEEN DATE_SUB(NOW(), INTERVAL 30 DAY) AND NOW();");
 $sql_hourred->execute();
 $array_hourred = $sql_hourred->fetchAll(pdo::FETCH_ASSOC);

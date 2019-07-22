@@ -16,6 +16,7 @@ if (isset($_SESSION['MYUSER'])) {
     $var_whse = $whssqlarray[0]['slottingDB_users_PRIMDC'];
 }
 
+$build = $_GET['building'];
 $sql_equippicks = $conn1->prepare("SELECT 
                                                                     equippicks_date,
                                                                     equippicks_currop,
@@ -28,7 +29,7 @@ $sql_equippicks = $conn1->prepare("SELECT
                                                                 FROM
                                                                     printvis.casedash_equippicks
                                                                 WHERE
-                                                                    equippicks_whse = $var_whse
+                                                                    equippicks_whse = $var_whse and equippicks_build = $build
                                                                     and equippicks_date >= '$startdate' and equippicks_date < '$currentdate'");
 $sql_equippicks->execute();
 $array_equippicks = $sql_equippicks->fetchAll(pdo::FETCH_ASSOC);
