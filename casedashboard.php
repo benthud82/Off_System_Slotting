@@ -141,7 +141,13 @@
                             $('td', row).eq(7).addClass('cellshade_blue');
                         }
                     },
-                    'sAjaxSource': "globaldata/casedash_equipmentpicks.php",
+                    ajax: {
+                        url: 'globaldata/casedash_equipmentpicks.php',
+                        data: {
+                            building: building
+                        }
+                    },
+//                    'sAjaxSource': "globaldata/casedash_equipmentpicks.php",
                     buttons: [
                         'copyHtml5',
                         'excelHtml5'
