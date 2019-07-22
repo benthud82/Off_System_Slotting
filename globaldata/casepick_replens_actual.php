@@ -15,6 +15,7 @@ $table = 'slotting.' . ($var_whse) . 'moves';
 $time = strtotime("-1 year", time());
 $date = date("Y-m-d", $time);
 
+$build = intval($_GET['building']);
 $result1 = $conn1->prepare("SELECT 
                                                         MVDATE,
                                                         slottingscore_hist_CURRCSEMOVES,
@@ -31,6 +32,7 @@ $result1 = $conn1->prepare("SELECT
                                                             AND replenexcl_date IS NULL
                                                             AND MVTZNE BETWEEN 7 AND 8
                                                             AND slottingscore_hist_WHSE = $var_whse
+                                                                and MVBUILD = $build
                                                     GROUP BY MVDATE , slottingscore_hist_CURRCSEMOVES");
 $result1->execute();
 

@@ -23,9 +23,35 @@
         <section id="content"> 
             <section class="main padder" style="padding-top: 75px;"> 
                 <div id="title" class="h2">Case Pick Dashboard</div>
+
+                <?php
+                if (isset($_SESSION['MYUSER'])) {
+                    $var_userid = $_SESSION['MYUSER'];
+                    $whssql = $conn1->prepare("SELECT slottingDB_users_PRIMDC from slotting.slottingdb_users WHERE idslottingDB_users_ID = '$var_userid'");
+                    $whssql->execute();
+                    $whssqlarray = $whssql->fetchAll(pdo::FETCH_ASSOC);
+                    $var_whse = $whssqlarray[0]['slottingDB_users_PRIMDC'];
+                }
+                if ($var_whse == 3) {
+                    $buidlingclass = '';
+                    $selected = "selected='selected'";
+                } else {
+                    $buidlingclass = 'hidden';
+                    $selected = '';
+                }
+                ?>
+                <div id="buildingcontainer" class="<?php echo $buidlingclass ?>">
+                    <label>Select Building: </label>
+                    <select class="selectstyle" id="building" name="building" style="width: 75px;" onChange="_load_data()">
+                        <!--<option value="both">Pick and Replen Map</option>-->
+                        <option value="1">1</option>
+                        <option value="2" <?php echo $selected ?>>2</option>
+                    </select>
+                </div>
+
                 <!--Header info Stats-->
                 <div id="headerstats"></div>
-                
+
                 <!--Case Moves by Date Highchart-->
                 <div class="col-sm-12">
                     <section class="panel hidewrapper" id="graph_historicalreplens_actual" style="margin-bottom: 50px; margin-top: 20px;"> 
@@ -47,7 +73,7 @@
                         </div>
                     </section>
                 </div>
-                
+
                 <!--Picking Equipment Analysis-->
                 <div class="col-sm-12">
                     <!--datatable for equipment by day-->
@@ -73,7 +99,7 @@
                         </div>
                     </section>
                 </div>
-                
+
             </section>
         </section>
 
@@ -82,10 +108,14 @@
             $("body").tooltip({selector: '[data-toggle="tooltip"]'});
             $("#help").addClass('active');
             $(document).ready(function () {
+                _load_data();
+            });
 
-            //call headerstats function
-            headerdata();
-                
+            function _load_data() {
+                var building = $('#building').val();
+                //call headerstats function
+                headerdata(building);
+
                 oTable = $('#table_dt_equipment').dataTable({
                     dom: "<'row'<'col-sm-4 pull-left'l><'col-sm-4 text-center'B><'col-sm-4 pull-right'f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-4 pull-left'i><'col-sm-8 pull-right'p>>",
                     destroy: true,
@@ -94,21 +124,21 @@
 //                    "aoColumnDefs": [
 //                        {"sClass": "lightgray", "aTargets": [1, 2, 5, 6]}
 //                    ],
-                                        "rowCallback": function (row, data, index) {
+                    "rowCallback": function (row, data, index) {
                         if (data[1] >= 0) {
-                             $('td', row).eq(1).addClass('lightgray');
+                            $('td', row).eq(1).addClass('lightgray');
                         }
                         if (data[2] >= 0) {
-                             $('td', row).eq(2).addClass('lightgray');
+                            $('td', row).eq(2).addClass('lightgray');
                         }
                         if (data[5] >= 0) {
-                             $('td', row).eq(5).addClass('lightgray');
+                            $('td', row).eq(5).addClass('lightgray');
                         }
                         if (data[6] >= 0) {
-                             $('td', row).eq(6).addClass('lightgray');
+                            $('td', row).eq(6).addClass('lightgray');
                         }
                         if (data[7] >= 0) {
-                             $('td', row).eq(7).addClass('cellshade_blue');
+                            $('td', row).eq(7).addClass('cellshade_blue');
                         }
                     },
                     'sAjaxSource': "globaldata/casedash_equipmentpicks.php",
@@ -185,6 +215,7 @@
                     series: []
                 };
                 $.ajax({
+                    data: {building: building},
                     url: 'globaldata/casepick_replens_actual.php',
                     type: 'GET',
                     dataType: 'json',
@@ -201,11 +232,12 @@
                         $(window).resize();
                     }
                 });
-            });
-                                        
+            }
+
             //Data pull to refresh header case data
-            function headerdata() {
+            function headerdata(building) {
                 $.ajax({
+                    data: {building: building},
                     url: 'globaldata/headerdata_casedash.php',
                     type: 'POST',
                     dataType: 'html',
