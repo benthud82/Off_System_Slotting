@@ -23,7 +23,7 @@ $result1 = $conn1->prepare("SELECT
                                                     FROM
                                                         $table
                                                             JOIN
-                                                        slotting.slottingscore_hist ON slottingscore_hist_DATE = MVDATE
+                                                        slotting.slottingscore_hist ON slottingscore_hist_DATE = MVDATE and slottingscore_hist_WHSE = MVWHSE and slottingscore_hist_BUILD = MVBUILD
                                                             LEFT JOIN
                                                         slotting.excl_replenphistorical ON MVDATE = replenexcl_date
                                                             AND replenexcl_whse = $var_whse
