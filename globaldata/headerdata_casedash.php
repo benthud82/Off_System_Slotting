@@ -11,7 +11,7 @@ if (isset($_SESSION['MYUSER'])) {
     $var_whse = $whssqlarray[0]['slottingDB_users_PRIMDC'];
     $whsesel = $whssqlarray[0]['slottingDB_users_PRIMDC'];
 }
-
+$build = intval($_POST['building']);
 //average pick reduction opportunity
 $sql_hourred = $conn1->prepare("SELECT 
                                                                 AVG(equippicks_hourred) as HOUR_RED
@@ -30,7 +30,7 @@ $sql_replenred = $conn1->prepare("SELECT
                                                         FROM
                                                             slotting.my_npfmvc_cse
                                                         WHERE
-                                                            WAREHOUSE = $var_whse");
+                                                            WAREHOUSE = $var_whse and BUILDING = $build");
 $sql_replenred->execute();
 $array_replenred = $sql_replenred->fetchAll(pdo::FETCH_ASSOC);
 $replenred = intval($array_replenred[0]['REPLEN_RED']);
