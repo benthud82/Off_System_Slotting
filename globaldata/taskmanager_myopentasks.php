@@ -17,7 +17,7 @@ $opentasks = $conn1->prepare("SELECT
                                                                 my_npfmvc ON WAREHOUSE = openactions_whse
                                                                     AND ITEM_NUMBER = openactions_item
                                                             WHERE
-                                                                openactions_assignedto = '$var_userid'
+                                                                UPPER(openactions_assignedto) = '$var_userid'
                                                                     AND PACKAGE_TYPE = 'LSE'
                                                                     AND openactions_status = 'OPEN';");
 $opentasks->execute();
