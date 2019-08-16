@@ -4,8 +4,8 @@
 ini_set('max_execution_time', 99999);
 include_once '../connection/connection_details.php';
 
-$var_userid = $_GET['userid'];
-$whssql = $conn1->prepare("SELECT slottingDB_users_PRIMDC from slotting.slottingdb_users WHERE idslottingDB_users_ID = '$var_userid'");
+$var_userid = strtoupper($_GET['userid']);
+$whssql = $conn1->prepare("SELECT slottingDB_users_PRIMDC from slotting.slottingdb_users WHERE UPPER(idslottingDB_users_ID) = '$var_userid'");
 $whssql->execute();
 $whssqlarray = $whssql->fetchAll(pdo::FETCH_ASSOC);
 
