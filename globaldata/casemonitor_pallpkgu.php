@@ -14,23 +14,27 @@ if (isset($_SESSION['MYUSER'])) {
 }
 
 $sql_pallpkgu = $conn1->prepare("SELECT 
-                                                                ITEM_NUMBER,
-                                                                PACKAGE_UNIT,
-                                                                CUR_LOCATION,
-                                                                DAYS_FRM_SLE,
-                                                                AVGD_BTW_SLE,
-                                                                AVG_INV_OH,
-                                                                AVG_DAILY_PICK,
-                                                                AVG_DAILY_UNIT
-                                                            FROM
-                                                                slotting.my_npfmvc_cse
-                                                                    JOIN
-                                                                slotting.npfcpcsettings ON CPCWHSE = WAREHOUSE
-                                                                    AND CPCITEM = ITEM_NUMBER
-                                                            WHERE
-                                                                WAREHOUSE = $var_whse AND SUGGESTED_TIER = 'PFR'
-                                                                    AND AVG_DAILY_PICK >= 1
-                                                                    AND CPCPPKU = 0");
+                                    ITEM_NUMBER,
+                                    PACKAGE_UNIT,
+                                    CUR_LOCATION,
+                                    DAYS_FRM_SLE,
+                                    AVGD_BTW_SLE,
+                                    AVG_INV_OH,
+                                    AVG_DAILY_PICK,
+                                    AVG_DAILY_UNIT
+                                FROM
+                                    slotting.my_npfmvc_cse
+                                        JOIN
+                                    slotting.npfcpcsettings ON CPCWHSE = WAREHOUSE
+                                        AND CPCITEM = ITEM_NUMBER
+                                        LEFT JOIN
+                                    slotting.exlusion_fullpallet ON WAREHOUSE = fp_whse
+                                        AND ITEM_NUMBER = fp_item
+                                WHERE
+                                    WAREHOUSE = $var_whse AND SUGGESTED_TIER = 'PFR'
+                                        AND AVG_DAILY_PICK >= 1
+                                        AND CPCPPKU = 0
+                                        AND fp_item IS NULL");
 $sql_pallpkgu->execute();
 $array_pallpkgu = $sql_pallpkgu->fetchAll(pdo::FETCH_ASSOC);
 

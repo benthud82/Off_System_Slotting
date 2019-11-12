@@ -23,16 +23,19 @@ if ($var_whse == 32) {
 
 
 $sql_palletopp = $conn1->prepare("SELECT 
-                                                                    COUNT(*) AS PALLETOPP
-                                                                FROM
-                                                                    slotting.my_npfmvc_cse
-                                                                        JOIN
-                                                                    slotting.npfcpcsettings ON CPCWHSE = WAREHOUSE
-                                                                        AND CPCITEM = ITEM_NUMBER
-                                                                WHERE
-                                                                    WAREHOUSE = $var_whse AND SUGGESTED_TIER = 'PFR'
-                                                                        AND AVG_DAILY_PICK >= 1
-                                                                        AND CPCPPKU = 0");
+                                    COUNT(*) AS PALLETOPP
+                                FROM
+                                    slotting.my_npfmvc_cse
+                                        JOIN
+                                    slotting.npfcpcsettings ON CPCWHSE = WAREHOUSE
+                                        AND CPCITEM = ITEM_NUMBER
+                                        LEFT JOIN
+                                    slotting.exlusion_fullpallet ON WAREHOUSE = fp_whse
+                                WHERE
+                                    WAREHOUSE = $var_whse AND SUGGESTED_TIER = 'PFR'
+                                        AND AVG_DAILY_PICK >= 1
+                                        AND CPCPPKU = 0
+                                        AND fp_item IS NULL");
 $sql_palletopp->execute();
 $array_palletopp = $sql_palletopp->fetchAll(pdo::FETCH_ASSOC);
 $palletopp = $array_palletopp[0]['PALLETOPP'];
