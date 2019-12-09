@@ -17,26 +17,32 @@ $var_tier = ($_GET['tiersel']);
 switch ($var_report) {  //build sql statement for report
     case 'MOVEIN':
         if ($var_tier == 'DECK') {
-            $reportsql = " LMTIER <> 'C06' and SUGGESTED_TIER = 'C06'";
-             $orderby = ' AVG_DAILY_PICK asc';
+            $reportsql = "and LMTIER <> 'C06' and SUGGESTED_TIER = 'C06'";
+            $orderby = ' AVG_DAILY_PICK asc';
         } else if ($var_tier == 'PFR') {
             $reportsql = " ";
         } else if ($var_tier == 'PALLET') {
-             $reportsql = " ";
+            $reportsql = " ";
+        } else if ($var_tier == 'ALL') {
+            $reportsql = " ";
+            $orderby = ' AVG_DAILY_PICK asc';
         }
-       
+
         break;
 
     case 'MOVEOUT':
         if ($var_tier == 'DECK') {
-            $reportsql = " LMTIER = 'C06' and SUGGESTED_TIER = 'PFR'";
-              $orderby = ' CURRENT_IMPMOVES desc';
+            $reportsql = "and LMTIER = 'C06' and SUGGESTED_TIER = 'PFR'";
+            $orderby = ' CURRENT_IMPMOVES desc';
         } else if ($var_tier == 'PFR') {
             $reportsql = " ";
         } else if ($var_tier == 'PALLET') {
-             $reportsql = " CURRENT_IMPMOVES desc";
+            $reportsql = " CURRENT_IMPMOVES desc";
+        } else if ($var_tier == 'ALL') {
+            $reportsql = " ";
+            $orderby = ' AVG_DAILY_PICK asc';
         }
-      
+
         break;
 }
 
@@ -64,7 +70,7 @@ $bayreport = $conn1->prepare("SELECT
                                     slotting.my_npfmvc_cse A
                                 WHERE
                                     A.WAREHOUSE = $var_whse
-                                        and $reportsql
+                                         $reportsql
                                 ORDER BY $orderby");
 $bayreport->execute();
 $bayreportarray = $bayreport->fetchAll(pdo::FETCH_ASSOC);
