@@ -59,6 +59,9 @@
                                 <th>Cur Depth</th>
                                 <th>Sug Grid5</th>
                                 <th>Sug Depth</th>
+                                <th>Curr Tier</th>
+                                <th>Sug Tier</th>
+                                <th>Sug Level</th>
                                 <th>Sug Max</th>
                                 <th>Sug Min</th>
                                 <th>Imp. Replen</th>
