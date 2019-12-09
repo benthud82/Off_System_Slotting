@@ -17,7 +17,15 @@ $totalmoduleerrors = $maperrorcount;  //+add+ $slotmastererror once programmed
     <ul class="nav" data-spy="" data-offset-top="50"> 
         <li id="dash"><a href="dashboard.php"><i class="fa fa-dashboard fa-lg"></i><span>Dashboard</span></a></li> 
         <li id="loose"><a href="looseslotting.php"><i class="fa fa-stack-overflow fa-lg"></i><span>Loose<br>Slotting</span></a></li> 
-        <li id="case"><a href="caseslotting.php"><i class="fa fa-cubes fa-lg"></i><span>Case<br>Slotting</span></a></li> 
+        <!--<li id="case"><a href="caseslotting.php"><i class="fa fa-cubes fa-lg"></i><span>Case<br>Slotting</span></a></li>--> 
+         <li id="case" class="dropdown-submenu" style="cursor: pointer;"> <a ><i class="fa fa-cubes fa-lg"></i><span>Case<br>Slotting</span></a> 
+            <ul class="dropdown-menu"> 
+                <li><a href="casedashboard.php">Case Dashboard</a></li> 
+                <li><a href="casemonitor.php.php">Case Monitor</a></li> 
+                <li><a href="casereports.php">Case Reports</a></li> 
+            </ul>
+        </li>
+
         <li id="reports" class="dropdown-submenu" style="cursor: pointer;"> <a ><i class="fa fa-th fa-lg"></i><span>Reports</span></a> 
 
             <ul class="dropdown-menu" style="min-width: 600px"> 
