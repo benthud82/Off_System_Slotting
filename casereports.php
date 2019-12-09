@@ -162,7 +162,7 @@
         </script>
 
         <script>
-            $("#reports").addClass('active');
+            $("#case").addClass('active');
 
         </script>
     </body>
