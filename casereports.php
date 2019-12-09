@@ -29,6 +29,7 @@
                         <label>Select Tier:</label>
                         <select class="selectstyle" id="tiersel" name="tiersel" style="width: 100px;padding: 5px; margin-right: 10px;"onchange="getgrid5data(this.value);">
                             <option value="DECK">DECK</option>
+                            <option value="ALL">ALL</option>
                             <!--<option value="PALLET">PALLET</option>-->
                             <!--<option value="PFR">PFR</option>-->
                         </select>
