@@ -65,7 +65,8 @@ $bayreport = $conn1->prepare("SELECT
                                     cast(A.SUGGESTED_IMPMOVES * 253 as UNSIGNED),
                                     cast(A.CURRENT_IMPMOVES * 253 as UNSIGNED),
                                     cast(A.AVG_DAILY_PICK as DECIMAL(4,2)),
-                                    cast(A.AVG_DAILY_UNIT as DECIMAL(4,2))
+                                    cast(A.AVG_DAILY_UNIT as DECIMAL(4,2)),
+                                    DLY_CUBE_VEL
                                 FROM
                                     slotting.my_npfmvc_cse A
                                 WHERE

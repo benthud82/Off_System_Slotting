@@ -69,6 +69,7 @@
                                 <th>Cur Replen</th>
                                 <th>Dly Pick</th>
                                 <th>Dly Unit</th>
+                                <th>Cube Vel</th>
                             </tr>
                         </thead>
                     </table>
