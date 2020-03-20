@@ -70,6 +70,7 @@
                                 <th>Dly Pick</th>
                                 <th>Dly Unit</th>
                                 <th>Cube Vel</th>
+                                <th>Location OH</th>
                             </tr>
                         </thead>
                     </table>
