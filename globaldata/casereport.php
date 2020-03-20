@@ -66,9 +66,11 @@ $bayreport = $conn1->prepare("SELECT
                                     cast(A.CURRENT_IMPMOVES * 253 as UNSIGNED),
                                     cast(A.AVG_DAILY_PICK as DECIMAL(4,2)),
                                     cast(A.AVG_DAILY_UNIT as DECIMAL(4,2)),
-                                    DLY_CUBE_VEL
+                                    DLY_CUBE_VEL,
+                                    locoh_onhand
                                 FROM
                                     slotting.my_npfmvc_cse A
+                                    LEFT JOIN slotting.loc_oh on locoh_whse = WAREHOUSE and locoh_item = ITEM_NUMBER and locoh_loc = CUR_LOCATION
                                 WHERE
                                     A.WAREHOUSE = $var_whse
                                          $reportsql
