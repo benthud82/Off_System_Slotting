@@ -35,40 +35,8 @@ $sql_replenred->execute();
 $array_replenred = $sql_replenred->fetchAll(pdo::FETCH_ASSOC);
 $replenred = intval($array_replenred[0]['REPLEN_RED']);
 
-echo 'Avg open put';
+echo 'Avg open put TEST';
 echo '<br>';
 echo $replenred;
 ?>
-
-
-<div class="row" style="padding-top: 25px">
-    <div class="col-lg-3 " id="stat_hourred">
-        <div class="dashboard-stat dashboard-stat-v2 yellow-casablanca">  
-            <div class="visual">
-                <i class="fa fa-cubes"></i>
-            </div>
-            <div class="details">
-                <div class="number">
-                    <span class="yestreturns" data-counter="counterup" data-value="<?php echo $hourred ?>"><?php echo $hourred ?></span>
-                </div>
-                <div class="desc"> Avg. Daily Picking Hour Reduction </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-3 " id="stat_replenred">
-        <div class="dashboard-stat dashboard-stat-v2 yellow-casablanca">  
-            <div class="visual">
-                <i class="fa fa-tags"></i>
-            </div>
-            <div class="details">
-                <div class="number">
-                    <span class="yestreturns" data-counter="counterup" data-value="<?php echo $replenred ?>"><?php echo $replenred ?></span>
-                </div>
-                <div class="desc"> Daily Replen Reduction Opportunity </div>
-            </div>
-        </div>
-    </div>
-
-</div>
-
 
