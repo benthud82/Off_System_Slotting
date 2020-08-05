@@ -31,7 +31,7 @@ $sql_palletopp = $conn1->prepare("SELECT
                                         AND CPCITEM = ITEM_NUMBER
                                         LEFT JOIN
                                     slotting.exlusion_fullpallet ON WAREHOUSE = fp_whse
-                                    and AND ITEM_NUMBER = fp_item
+                                     AND ITEM_NUMBER = fp_item
                                 WHERE
                                     WAREHOUSE = $var_whse AND SUGGESTED_TIER = 'PFR'
                                         AND AVG_DAILY_PICK >= 1
