@@ -2,7 +2,7 @@
 <html>
     <?php
     include 'sessioninclude.php';
-        include_once 'connection/connection_details.php';
+    include_once 'connection/connection_details.php';
     ?>
     <head>
         <title>OSS - Loose Slottting</title>
@@ -27,8 +27,8 @@
                             <option value=10>10</option>
                             <option value=25>25</option>
                             <option value=50>50</option>
-							<option value=75>75</option>
-							<option value=100>100</option>
+                            <option value=75>75</option>
+                            <option value=100>100</option>
                         </select>
                     </div>
                     <div class="pull-left" style="margin-left: 15px" >
@@ -60,7 +60,7 @@
 
                             <div class="modal-body" id="" style="margin: 25px;">
                                 <h4 style="font-family: calibri">The loose slotting algorithm analyzes lowest scoring items and determines most advantageous course of action to increase the total item score.  The hierarchy is as follows: </h4>
-                                
+
                                 <ul style="font-family: calibri">
                                     <li><strong>Perfect Slot</strong> - Empty location found in optimal bay and optimal grid5.</li>
                                     <li><strong>Level 1 Swap</strong> - By moving an item out of current location (to optimal bay and optimal grid5), a perfect slot will be emptied for target item.</li>
@@ -75,8 +75,8 @@
                     </div>
                 </div>
 
-                
-                
+
+
                 <!-- Add Action Modal -->
                 <div id="addactionmodal" class="modal fade " role="dialog">
                     <div class="modal-dialog modal-lg">
@@ -119,8 +119,8 @@
 
         <script>
             $("body").tooltip({selector: '[data-toggle="tooltip"]'});
-            
-            
+
+
             //add item task to mysql table
             $(document).on("click", "#additemaction", function (event) {
                 event.preventDefault();
@@ -147,8 +147,8 @@
                 $('#itemnummodal').val(itemnum);
                 $('#addactionmodal').modal('toggle');
             });
-            
-            
+
+
 
             function showhelpmodal() {  //show help modal
                 $('#container_helpmodal').modal('toggle');
@@ -267,16 +267,16 @@
                     }
                 });
             });
-                    
-        
-        
+
+
+
             //On close of action modal, clear all fields and toggle hidden
             $('.modal').on('hidden.bs.modal', function () {
                 $(this).find('form')[0].reset();
             });
 
-        
-        
+
+
         </script>
 
 

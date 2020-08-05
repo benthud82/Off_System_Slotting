@@ -171,46 +171,46 @@
             <br>
             <div class="line-separator"></div> <br>
 
-<?php
-if (!empty($_POST['whse'])) {
-    $var_whse = intval($_POST['whse']);
-    $a_movedays = intval($_POST['amovedays']);
-    $b_movedays = intval($_POST['bmovedays']);
-    $c_movedays = intval($_POST['cmovedays']);
-    $d_movedays = intval($_POST['dmovedays']);
+            <?php
+            if (!empty($_POST['whse'])) {
+                $var_whse = intval($_POST['whse']);
+                $a_movedays = intval($_POST['amovedays']);
+                $b_movedays = intval($_POST['bmovedays']);
+                $c_movedays = intval($_POST['cmovedays']);
+                $d_movedays = intval($_POST['dmovedays']);
 
-    $a_trigger = intval($_POST['atriggerdays']);
-    $b_trigger = intval($_POST['btriggerdays']);
-    $c_trigger = intval($_POST['ctriggerdays']);
-    $d_trigger = intval($_POST['dtriggerdays']);
-} else {
-    die;
-}
-?> 
-
-
-<?php
-ini_set('max_execution_time', 99999);
-
-$pdo_dsn = "odbc:DRIVER={iSeries Access ODBC DRIVER};SYSTEM=A";
-$pdo_username = "BHUD01";
-$pdo_password = "tucker1234";
-$aseriesconn = new PDO($pdo_dsn, $pdo_username, $pdo_password, array());
+                $a_trigger = intval($_POST['atriggerdays']);
+                $b_trigger = intval($_POST['btriggerdays']);
+                $c_trigger = intval($_POST['ctriggerdays']);
+                $d_trigger = intval($_POST['dtriggerdays']);
+            } else {
+                die;
+            }
+            ?> 
 
 
+            <?php
+            ini_set('max_execution_time', 99999);
 
-switch ($var_whse) {
-    case "7":
-        $offsiterange = 'W5%';
-        break;
-    case "6":
-        $offsiterange = '';
-        break;
-    case "3":
-        $offsiterange = 'X%';
-        break;
-    case "2":
-        $result = $aseriesconn->prepare("SELECT DISTINCT WRSWHS as WHSE,
+            $pdo_dsn = "odbc:DRIVER={iSeries Access ODBC DRIVER};SYSTEM=A";
+            $pdo_username = "BHUD01";
+            $pdo_password = "tucker1234";
+            $aseriesconn = new PDO($pdo_dsn, $pdo_username, $pdo_password, array());
+
+
+
+            switch ($var_whse) {
+                case "7":
+                    $offsiterange = 'W5%';
+                    break;
+                case "6":
+                    $offsiterange = '';
+                    break;
+                case "3":
+                    $offsiterange = 'X%';
+                    break;
+                case "2":
+                    $result = $aseriesconn->prepare("SELECT DISTINCT WRSWHS as WHSE,
                                             WRSITM as ITEM,
                                             IMDESC as DESCRIPTION,
                                             LOPRTA as ALLOC,
@@ -272,12 +272,12 @@ switch ($var_whse) {
                                        and LOLOC#  < 'W50%'
                                         GROUP BY WRSWHS , WRSITM , IMDESC , LOPRTA, VCPKGU, VCCLAS, VCLOC#, SHIP_QTY_MN");
 
-        $result->execute();
-        $resultsetarray = $result->fetchAll(PDO::FETCH_ASSOC);
-        break;
-    case "9":
+                    $result->execute();
+                    $resultsetarray = $result->fetchAll(PDO::FETCH_ASSOC);
+                    break;
+                case "9":
 
-        $result = $aseriesconn->prepare("SELECT DISTINCT WRSWHS as WHSE,
+                    $result = $aseriesconn->prepare("SELECT DISTINCT WRSWHS as WHSE,
                                             WRSITM as ITEM,
                                             IMDESC as DESCRIPTION,
                                             LOPRTA as ALLOC,
@@ -369,19 +369,19 @@ switch ($var_whse) {
                                                     and LOLOC# not like 'W57%'
                                         GROUP BY WRSWHS , WRSITM , IMDESC , LOPRTA, VCPKGU, VCCLAS, VCLOC#, SHIP_QTY_MN");
 
-        $result->execute();
-        $resultsetarray = $result->fetchAll(PDO::FETCH_ASSOC);
+                    $result->execute();
+                    $resultsetarray = $result->fetchAll(PDO::FETCH_ASSOC);
 
-        break;
-    default :
-        $whsenum = '';
-        break;
-}
+                    break;
+                default :
+                    $whsenum = '';
+                    break;
+            }
 
 
 #Get line item info by PO#
-if (!isset($resultsetarray)) {
-    $result = $aseriesconn->prepare("SELECT DISTINCT WRSWHS as WHSE,
+            if (!isset($resultsetarray)) {
+                $result = $aseriesconn->prepare("SELECT DISTINCT WRSWHS as WHSE,
                                             WRSITM as ITEM,
                                             IMDESC as DESCRIPTION,
                                             LOPRTA as ALLOC,
@@ -443,109 +443,109 @@ if (!isset($resultsetarray)) {
                                         and LOLOC# not like '$offsiterange' 
                                         GROUP BY WRSWHS , WRSITM , IMDESC , LOPRTA, VCPKGU, VCCLAS, VCLOC#, SHIP_QTY_MN / VCADBS");
 
-    $result->execute();
-    $resultsetarray = $result->fetchAll(PDO::FETCH_ASSOC);
-}
-include '../globalfunctions/slottingfunctions.php';
-include '../CUSTVIS/globalscripts.php';
+                $result->execute();
+                $resultsetarray = $result->fetchAll(PDO::FETCH_ASSOC);
+            }
+            include '../globalfunctions/slottingfunctions.php';
+            include '../CUSTVIS/globalscripts.php';
 
-$totalpalletcount = 0;
-$displayarray = array();
-$counter = 0;
-foreach ($resultsetarray as $rsrow => $value) {
-
-
-    $WHSE = $resultsetarray[$rsrow]['WHSE'];
-    $ITEM = $resultsetarray[$rsrow]['ITEM'];
-    $DESCRIPTION = $resultsetarray[$rsrow]['DESCRIPTION'];
-    $ALLOC = intval($resultsetarray[$rsrow]['ALLOC']);
-    $ONHAND = intval($resultsetarray[$rsrow]['ONHAND']) + intval($resultsetarray[$rsrow]['OFFSITEMOVEQTY']);
-    $DAILYQTY = intval($resultsetarray[$rsrow]['DAILYQTY']);
-    $MCCLASS = $resultsetarray[$rsrow]['MCCLASS'];
-    $PALLETQTY = $resultsetarray[$rsrow]['PALLETQTY'];
-    $OFFSITEOH = $resultsetarray[$rsrow]['OFFSITEOH'];
-    $LOCATION = $resultsetarray[$rsrow]['LOCATION'];
-    $OffsiteOH = $resultsetarray[$rsrow]['OFFSITEOH'];
-
-    if ($WHSE == 9) {
-        $MCCLASS = _mcstandardize($MCCLASS); //standardize movement class to A-D
-    }
+            $totalpalletcount = 0;
+            $displayarray = array();
+            $counter = 0;
+            foreach ($resultsetarray as $rsrow => $value) {
 
 
+                $WHSE = $resultsetarray[$rsrow]['WHSE'];
+                $ITEM = $resultsetarray[$rsrow]['ITEM'];
+                $DESCRIPTION = $resultsetarray[$rsrow]['DESCRIPTION'];
+                $ALLOC = intval($resultsetarray[$rsrow]['ALLOC']);
+                $ONHAND = intval($resultsetarray[$rsrow]['ONHAND']) + intval($resultsetarray[$rsrow]['OFFSITEMOVEQTY']);
+                $DAILYQTY = intval($resultsetarray[$rsrow]['DAILYQTY']);
+                $MCCLASS = $resultsetarray[$rsrow]['MCCLASS'];
+                $PALLETQTY = $resultsetarray[$rsrow]['PALLETQTY'];
+                $OFFSITEOH = $resultsetarray[$rsrow]['OFFSITEOH'];
+                $LOCATION = $resultsetarray[$rsrow]['LOCATION'];
+                $OffsiteOH = $resultsetarray[$rsrow]['OFFSITEOH'];
 
-    switch ($MCCLASS) {
-        case 'A':
-            $var_days = $a_trigger;
-            $movedays = $a_movedays;
-            break;
-        case 'B':
-            $var_days = $b_trigger;
-            $movedays = $b_movedays;
-            break;
-        case 'C':
-            $var_days = $c_trigger;
-            $movedays = $c_movedays;
-            break;
-        case 'D':
-            $var_days = $d_trigger;
-            $movedays = $d_movedays;
-            break;
-
-        default:
-            break;
-    }
-
-    $PKGU = $resultsetarray[$rsrow]['PKGU'];
-
-    if ($DAILYQTY == 0) {
-        continue;
-    }
-
-    $DAYSOH = floor(($ONHAND - $ALLOC) / $DAILYQTY);
-
-    $moveqty = $movedays * $DAILYQTY;  //calculate move qty based on movement class
-    $palletcount = '-';
-
-    if ($PALLETQTY > 0) {
-        $moveqty = min(ceil($moveqty / $PALLETQTY) * $PALLETQTY, $OFFSITEOH);  //round to nearest pallet qty or OH qty in offsite
-        $palletcount = ceil($moveqty / $PALLETQTY);
-    }
+                if ($WHSE == 9) {
+                    $MCCLASS = _mcstandardize($MCCLASS); //standardize movement class to A-D
+                }
 
 
 
-    if ($DAYSOH > $var_days) {
-        continue;
-    }
-    if ($palletcount !== '-') {
-        $totalpalletcount += $palletcount;
-    }
-    $displayarray[$counter]['WHSE'] = $WHSE;
-    $displayarray[$counter]['ITEM'] = $ITEM;
-    $displayarray[$counter]['DESCRIPTION'] = $DESCRIPTION;
-    $displayarray[$counter]['ONHAND'] = $ONHAND;
-    $displayarray[$counter]['ALLOC'] = $ALLOC;
-    $displayarray[$counter]['DAILYQTY'] = $DAILYQTY;
-    $displayarray[$counter]['MCCLASS'] = $MCCLASS;
-    $displayarray[$counter]['PKGU'] = $PKGU;
-    $displayarray[$counter]['PALLETQTY'] = $PALLETQTY;
-    $displayarray[$counter]['DAYSOH'] = $DAYSOH;
-    $displayarray[$counter]['moveqty'] = $moveqty;
-    $displayarray[$counter]['palletcount'] = $palletcount;
-    $displayarray[$counter]['LOCATION'] = $LOCATION;
-    $displayarray[$counter]['OffsiteOH'] = $OffsiteOH;
-    $counter += 1;
-}
+                switch ($MCCLASS) {
+                    case 'A':
+                        $var_days = $a_trigger;
+                        $movedays = $a_movedays;
+                        break;
+                    case 'B':
+                        $var_days = $b_trigger;
+                        $movedays = $b_movedays;
+                        break;
+                    case 'C':
+                        $var_days = $c_trigger;
+                        $movedays = $c_movedays;
+                        break;
+                    case 'D':
+                        $var_days = $d_trigger;
+                        $movedays = $d_movedays;
+                        break;
 
-foreach ($displayarray as $k => $v) {
-    $sort['DAYSOH'][$k] = $v['DAYSOH'];
-    $sort['DAILYQTY'][$k] = $v['DAILYQTY'];
-}
+                    default:
+                        break;
+                }
+
+                $PKGU = $resultsetarray[$rsrow]['PKGU'];
+
+                if ($DAILYQTY == 0) {
+                    continue;
+                }
+
+                $DAYSOH = floor(($ONHAND - $ALLOC) / $DAILYQTY);
+
+                $moveqty = $movedays * $DAILYQTY;  //calculate move qty based on movement class
+                $palletcount = '-';
+
+                if ($PALLETQTY > 0) {
+                    $moveqty = min(ceil($moveqty / $PALLETQTY) * $PALLETQTY, $OFFSITEOH);  //round to nearest pallet qty or OH qty in offsite
+                    $palletcount = ceil($moveqty / $PALLETQTY);
+                }
 
 
-if (isset($k)) {
-    array_multisort($sort['DAYSOH'], SORT_ASC, $sort['DAILYQTY'], SORT_DESC, $displayarray);
-}
-?>
+
+                if ($DAYSOH > $var_days) {
+                    continue;
+                }
+                if ($palletcount !== '-') {
+                    $totalpalletcount += $palletcount;
+                }
+                $displayarray[$counter]['WHSE'] = $WHSE;
+                $displayarray[$counter]['ITEM'] = $ITEM;
+                $displayarray[$counter]['DESCRIPTION'] = $DESCRIPTION;
+                $displayarray[$counter]['ONHAND'] = $ONHAND;
+                $displayarray[$counter]['ALLOC'] = $ALLOC;
+                $displayarray[$counter]['DAILYQTY'] = $DAILYQTY;
+                $displayarray[$counter]['MCCLASS'] = $MCCLASS;
+                $displayarray[$counter]['PKGU'] = $PKGU;
+                $displayarray[$counter]['PALLETQTY'] = $PALLETQTY;
+                $displayarray[$counter]['DAYSOH'] = $DAYSOH;
+                $displayarray[$counter]['moveqty'] = $moveqty;
+                $displayarray[$counter]['palletcount'] = $palletcount;
+                $displayarray[$counter]['LOCATION'] = $LOCATION;
+                $displayarray[$counter]['OffsiteOH'] = $OffsiteOH;
+                $counter += 1;
+            }
+
+            foreach ($displayarray as $k => $v) {
+                $sort['DAYSOH'][$k] = $v['DAYSOH'];
+                $sort['DAILYQTY'][$k] = $v['DAILYQTY'];
+            }
+
+
+            if (isset($k)) {
+                array_multisort($sort['DAYSOH'], SORT_ASC, $sort['DAILYQTY'], SORT_DESC, $displayarray);
+            }
+            ?>
 
 
 
@@ -559,7 +559,7 @@ if (isset($k)) {
                         </div>
                         <div class="details">
                             <div class="number">
-<?php echo number_format($totalpalletcount); ?> 
+                                <?php echo number_format($totalpalletcount); ?> 
                             </div>
                             <div class="desc">
                                 Total Pallets to Move
@@ -574,7 +574,7 @@ if (isset($k)) {
                         </div>
                         <div class="details">
                             <div class="number">
-<?php echo number_format($counter); ?> 
+                                <?php echo number_format($counter); ?> 
                             </div>
                             <div class="desc">
                                 Total Items
@@ -618,26 +618,26 @@ if (isset($k)) {
                                 </tr>
                             </thead>
                             <tbody>
-<?php
-foreach ($displayarray as $key => $value) {
-    echo "<tr>";
-    echo "<td>" . $displayarray[$key]['WHSE'] . "</td>";
-    echo "<td>" . $displayarray[$key]['ITEM'] . "</td>";
-    echo "<td>" . $displayarray[$key]['DESCRIPTION'] . "</td>";
-    echo "<td>" . $displayarray[$key]['LOCATION'] . "</td>";
-    echo "<td>" . $displayarray[$key]['ONHAND'] . "</td>";
-    echo "<td>" . $displayarray[$key]['OffsiteOH'] . "</td>";
-    echo "<td>" . $displayarray[$key]['ALLOC'] . "</td>";
-    echo "<td>" . $displayarray[$key]['DAILYQTY'] . "</td>";
-    echo "<td>" . $displayarray[$key]['MCCLASS'] . "</td>";
-    echo "<td>" . $displayarray[$key]['PKGU'] . "</td>";
-    echo "<td>" . $displayarray[$key]['PALLETQTY'] . "</td>";
-    echo "<td>" . $displayarray[$key]['DAYSOH'] . "</td>";
-    echo "<td>" . $displayarray[$key]['moveqty'] . "</td>";
-    echo "<td>" . $displayarray[$key]['palletcount'] . "</td>";
-    echo "</tr>";
-}
-?>
+                                <?php
+                                foreach ($displayarray as $key => $value) {
+                                    echo "<tr>";
+                                    echo "<td>" . $displayarray[$key]['WHSE'] . "</td>";
+                                    echo "<td>" . $displayarray[$key]['ITEM'] . "</td>";
+                                    echo "<td>" . $displayarray[$key]['DESCRIPTION'] . "</td>";
+                                    echo "<td>" . $displayarray[$key]['LOCATION'] . "</td>";
+                                    echo "<td>" . $displayarray[$key]['ONHAND'] . "</td>";
+                                    echo "<td>" . $displayarray[$key]['OffsiteOH'] . "</td>";
+                                    echo "<td>" . $displayarray[$key]['ALLOC'] . "</td>";
+                                    echo "<td>" . $displayarray[$key]['DAILYQTY'] . "</td>";
+                                    echo "<td>" . $displayarray[$key]['MCCLASS'] . "</td>";
+                                    echo "<td>" . $displayarray[$key]['PKGU'] . "</td>";
+                                    echo "<td>" . $displayarray[$key]['PALLETQTY'] . "</td>";
+                                    echo "<td>" . $displayarray[$key]['DAYSOH'] . "</td>";
+                                    echo "<td>" . $displayarray[$key]['moveqty'] . "</td>";
+                                    echo "<td>" . $displayarray[$key]['palletcount'] . "</td>";
+                                    echo "</tr>";
+                                }
+                                ?>
 
 
 

@@ -21,7 +21,7 @@ $totalmoduleerrors = $maperrorcount;  //+add+ $slotmastererror once programmed
          <li id="case" class="dropdown-submenu" style="cursor: pointer;"> <a ><i class="fa fa-cubes fa-lg"></i><span>Case<br>Slotting</span></a> 
             <ul class="dropdown-menu"> 
                 <li><a href="casedashboard.php">Case Dashboard</a></li> 
-                <li><a href="casemonitor.php.php">Case Monitor</a></li> 
+                <li><a href="casemonitor.php">Case Monitor</a></li> 
                 <li><a href="casereports.php">Case Reports</a></li> 
             </ul>
         </li>
