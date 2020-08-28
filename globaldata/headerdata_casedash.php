@@ -35,9 +35,6 @@ $sql_replenred->execute();
 $array_replenred = $sql_replenred->fetchAll(pdo::FETCH_ASSOC);
 $replenred = intval($array_replenred[0]['REPLEN_RED']);
 
-echo 'Avg open put';
-echo '<br>';
-echo $replenred;
 ?>
 
 
