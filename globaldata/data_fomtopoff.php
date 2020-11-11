@@ -133,12 +133,12 @@ foreach ($resultsetarray as $key => $value) {
     }
 
     unset($resultsetarray[$key][11]);  //Remove the keyvalue from the result array
-    unset($resultsetarray[$key][12]);  //Remove the FOMAVGAVG from the result array
+//    unset($resultsetarray[$key][12]);  //Remove the FOMAVGAVG from the result array
     unset($resultsetarray[$key][13]);  //Remove the FOMAVGSTD from the result array
     unset($resultsetarray[$key][14]);  //Remove the FOMAVGCOUNT from the result array
 
     $resultsetarray[$key] = array_values($resultsetarray[$key]);  //Reset array keys
-    $resultsetarray[$key][11] = $highdemand;
+    $resultsetarray[$key][12] = $highdemand;
 
     $lockeyindex = _searchForLoc($resultsetarray[$key][1], $reserveresultsetarray); //using the search for moves function to find location to determine if bin or case move
     if (isset($lockeyindex)) {
@@ -152,8 +152,8 @@ foreach ($resultsetarray as $key => $value) {
         $movetype = 'Case';
     }
 
-    $resultsetarray[$key][12] = $movetype; //push move type to end of result array
-    $resultsetarray[$key][13]  = $probstockout;
+    $resultsetarray[$key][13] = $movetype; //push move type to end of result array
+    $resultsetarray[$key][14]  = $probstockout;
 }
 
 
