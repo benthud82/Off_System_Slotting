@@ -12,7 +12,7 @@
         <?php include_once 'headerincludes.php'; ?>
     </head>
 
-    <body style="">
+    <body style=""> 
         <!--include horz nav php file-->
         <?php include_once 'horizontalnav.php'; ?>
         <!--include vert nav php file-->

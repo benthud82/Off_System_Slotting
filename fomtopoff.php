@@ -88,6 +88,7 @@
                             <th>Grid 5</th>
                             <th>Reserve OH</th>
                             <th>Item MC</th>
+                            <th>Avg Demand</th>
                             <th>High Demand</th>
                             <th>Move Type</th>
                             <th>Prob of Stockout</th>
