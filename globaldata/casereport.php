@@ -78,7 +78,7 @@ $bayreport = $conn1->prepare("SELECT
                                             WHERE
                                                 locoh_whse = WAREHOUSE
                                                     AND locoh_item = ITEM_NUMBER
-                                                    AND (locoh_loc like 'W%' or locoh_loc like 'R%')
+                                                    AND (locoh_loc like 'W%' or locoh_loc like 'R%'))
                                     ELSE (SELECT 
                                             SUM(locoh_onhand)
                                         FROM
