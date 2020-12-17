@@ -86,7 +86,7 @@ $bayreport = $conn1->prepare("SELECT
                                             locoh_whse = WAREHOUSE
                                                 AND locoh_item = ITEM_NUMBER
                                                 AND locoh_loc = CUR_LOCATION)
-                                END AS locoh_onhand,
+                                END AS locoh_onhand
                                 FROM
                                     slotting.my_npfmvc_cse A
                                     LEFT JOIN slotting.loc_oh on locoh_whse = WAREHOUSE and locoh_item = ITEM_NUMBER and locoh_loc = CUR_LOCATION
