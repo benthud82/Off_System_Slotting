@@ -67,7 +67,26 @@ $bayreport = $conn1->prepare("SELECT
                                     cast(A.AVG_DAILY_PICK as DECIMAL(4,2)),
                                     cast(A.AVG_DAILY_UNIT as DECIMAL(4,2)),
                                     DLY_CUBE_VEL,
-                                    locoh_onhand
+                                    CASE
+                                    WHEN
+                                        CUR_LOCATION = 'PFR'
+                                    THEN
+                                        (SELECT 
+                                                SUM(locoh_onhand)
+                                            FROM
+                                                nahsi.loc_oh
+                                            WHERE
+                                                locoh_whse = WAREHOUSE
+                                                    AND locoh_item = ITEM_NUMBER)
+                                    ELSE (SELECT 
+                                            SUM(locoh_onhand)
+                                        FROM
+                                            nahsi.loc_oh
+                                        WHERE
+                                            locoh_whse = WAREHOUSE
+                                                AND locoh_item = ITEM_NUMBER
+                                                AND locoh_loc = CUR_LOCATION)
+                                END AS locoh_onhand,
                                 FROM
                                     slotting.my_npfmvc_cse A
                                     LEFT JOIN slotting.loc_oh on locoh_whse = WAREHOUSE and locoh_item = ITEM_NUMBER and locoh_loc = CUR_LOCATION
