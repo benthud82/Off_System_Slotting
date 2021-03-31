@@ -31,13 +31,16 @@ $rows4 = array();
 $rows4['name'] = 'Total';
 
 
-foreach ($result1 as $row) {
-    $rows['data'][] = $row['MoveDate'];
-    $rows1['data'][] = intval($row['ASOCount']);
-    $rows2['data'][] = intval($row['AUTOCount']);
-    $rows3['data'][] = intval($row['CONSOLCount']);
-    $rows4['data'][] = intval($row['AUTOCount']) + intval($row['ASOCount']);
+foreach ($result1array as $key => $value) {
+    $rows['data'][] = $result1array[$key]['MoveDate'];
+    $rows1['data'][] = intval($result1array[$key]['ASOCount']);
+    $rows2['data'][] = intval($result1array[$key]['AUTOCount']);
+    $rows3['data'][] = intval($result1array[$key]['CONSOLCount']);
+    $rows4['data'][] = intval($result1array[$key]['AUTOCount']) + intval($result1array[$key]['ASOCount']);
+
 }
+
+
 
 
 $result = array();
