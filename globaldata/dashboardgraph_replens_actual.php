@@ -12,26 +12,31 @@ $table = ($var_whse) . 'dailymovecount';
 $time = strtotime("-1 year", time());
 $date = date("Y-m-d", $time);
 
-$result1 = $conn1->prepare("SELECT * FROM {$table} LEFT JOIN slotting.excl_replenphistorical on  MoveDate = replenexcl_date and replenexcl_whse = $var_whse  WHERE MoveDate >= '$date' and  replenexcl_date is null  ");
+$result1 = $conn1->prepare("SELECT * FROM slotting.$table LEFT JOIN slotting.excl_replenphistorical on  MoveDate = replenexcl_date and replenexcl_whse = $var_whse  WHERE MoveDate >= '$date' and  replenexcl_date is null;");
 $result1->execute();
+$result1array = $result1->fetchAll(pdo::FETCH_ASSOC);
+
 
 
 
 $rows = array();
 $rows['name'] = 'Date';
-$rows1 = array();
+$rows1 = array();   
 $rows1['name'] = 'ASOs';
 $rows2 = array();
 $rows2['name'] = 'AUTOs';
 $rows3 = array();
-$rows3['name'] = 'Total';
+$rows3['name'] = 'CONSOLs';
+$rows4 = array();
+$rows4['name'] = 'Total';
 
 
 foreach ($result1 as $row) {
     $rows['data'][] = $row['MoveDate'];
     $rows1['data'][] = intval($row['ASOCount']);
     $rows2['data'][] = intval($row['AUTOCount']);
-    $rows3['data'][] = intval($row['AUTOCount']) + intval($row['ASOCount']);
+    $rows3['data'][] = intval($row['CONSOLCount']);
+    $rows4['data'][] = intval($row['AUTOCount']) + intval($row['ASOCount']);
 }
 
 
@@ -40,6 +45,7 @@ array_push($result, $rows);
 array_push($result, $rows1);
 array_push($result, $rows2);
 array_push($result, $rows3);
+array_push($result, $rows4);
 
 
 print json_encode($result);

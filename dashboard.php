@@ -647,6 +647,7 @@
                         options3.series[0] = json[1];
                         options3.series[1] = json[2];
                         options3.series[2] = json[3];
+                        options3.series[3] = json[4];
 
                         chart = new Highcharts.Chart(options3);
                         series = chart.series;
