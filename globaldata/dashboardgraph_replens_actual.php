@@ -12,7 +12,7 @@ $table = ($var_whse) . 'dailymovecount';
 $time = strtotime("-1 year", time());
 $date = date("Y-m-d", $time);
 
-$result1 = $conn1->prepare("SELECT * FROM slotting.$table LEFT JOIN slotting.excl_replenphistorical on  MoveDate = replenexcl_date and replenexcl_whse = $var_whse  WHERE MoveDate >= '$date' and  replenexcl_date is null;");
+$result1 = $conn1->prepare("SELECT * FROM slotting.$table  WHERE MoveDate >= '$date';");
 $result1->execute();
 $result1array = $result1->fetchAll(pdo::FETCH_ASSOC);
 
