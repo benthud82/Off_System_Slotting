@@ -62,6 +62,7 @@
                 <option value="L04">L04 - Blue Bins</option>
                 <option value="C01">C01 - Bulk Pallet</option>
                 <option value="C02">C02 - Pick to Belt</option>
+                <option value="C%">All Case</option>
             </select>
             <select class="selectstyle" id="mc" name="mc" onchange="showloaddata();" style="min-width: 150px; ">
                 <option value=0>Choose MC...</option>
