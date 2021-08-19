@@ -26,7 +26,7 @@ if (in_array($whsenum, $USAarray)) {
 } else {
     include_once '../../globalincludes/canada_asys.php';
 #Query the Database into a result set - 
-    $result = $aseriesconn->prepare("SELECT ' ', ITEM_NUMBER, PACKAGE_UNIT, DAYS_FRM_SLE, int(AVGD_BTW_SLE), PICK_QTY_SM, int(SLOT_QTY), case when temp.Count >= 1 then temp.Count else 0 end as newCount, (WAREHOUSE||ITEM_NUMBER) as exclkey FROM A.ARCPCORDTA.NPTSLD LEFT OUTER JOIN (Select  PDWHSE||PDITEM||PDPKGU as KEY, count(PDCOMP) as Count FROM A.ARCPCORDTA.NOTWPT WHERE PDBXSZ = 'CSE'  and PDWHSE = $whsenum GROUP BY PDWHSE||PDITEM||PDPKGU) temp on KEY = WAREHOUSE||ITEM_NUMBER||PACKAGE_UNIT WHERE WAREHOUSE = $whsenum and PACKAGE_TYPE = 'PFR' and case when temp.Count >= 1 then temp.Count else 0 end >= 20 ORDER BY case when temp.Count >= 1 then temp.Count else 0 end DESC");
+    $result = $aseriesconn->prepare("SELECT ' ', ITEM_NUMBER, PACKAGE_UNIT, DAYS_FRM_SLE, int(AVGD_BTW_SLE), PICK_QTY_SM, int(SLOT_QTY), case when temp.Count >= 1 then  temp.Count else 0 end as newCount, (WAREHOUSE||ITEM_NUMBER) as exclkey FROM A.ARCPCORDTA.NPTSLD LEFT OUTER JOIN (Select  PDWHSE||PDITEM||PDPKGU as KEY, count(PDCOMP) as Count FROM A.ARCPCORDTA.NOTWPT WHERE PDBXSZ = 'CSE'  and PDWHSE = $whsenum GROUP BY PDWHSE||PDITEM||PDPKGU) temp on KEY = WAREHOUSE||ITEM_NUMBER||PACKAGE_UNIT WHERE WAREHOUSE = $whsenum and PACKAGE_TYPE = 'PFR' and case when temp.Count >= 1 then temp.Count else 0 end >= 20 ORDER BY case when temp.Count >= 1 then temp.Count else 0 end DESC");
     $result->execute();
     $resultsetarray = $result->fetchAll(PDO::FETCH_NUM);
 }
