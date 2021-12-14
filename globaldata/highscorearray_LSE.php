@@ -61,8 +61,6 @@ $TOP_SCORE = $conn1->prepare("SELECT DISTINCT
                                         LEFT JOIN
                                         slotting.item_settings ON WHSE = WAREHOUSE AND ITEM = ITEM_NUMBER
                                             AND PKGU = PACKAGE_UNIT
-                                        AND goal_item = A.ITEM_NUMBER
-                                        AND goal_pkgu = A.PACKAGE_UNIT
                                          LEFT JOIN slotting.slottingdb_itemactions on openactions_whse = SCORE_WHSE and openactions_item = SCORE_ITEM
                                     WHERE
                                         A.WAREHOUSE = $var_whse
