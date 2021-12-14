@@ -82,8 +82,6 @@
         <script>
             $("body").tooltip({selector: '[data-toggle="tooltip"]'});
 
-
-
             //add item task to mysql table
             $(document).on("click", "#additemaction", function (event) {
                 event.preventDefault();

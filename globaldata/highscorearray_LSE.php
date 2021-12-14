@@ -1,7 +1,8 @@
 <?php
 
 if ($var_whse == 6 || $var_whse == 9|| $var_whse == 3|| $var_whse == 7|| $var_whse == 2){
-    $whs6L01filter  = " and A.LMTIER <> 'L01' and A.SUGGESTED_TIER <> 'L01'";
+//    $whs6L01filter  = " and A.LMTIER <> 'L01' and A.SUGGESTED_TIER <> 'L01'";
+     $whs6L01filter = ' ';
 }else{
     $whs6L01filter = ' ';
 }
@@ -60,8 +61,6 @@ $TOP_SCORE = $conn1->prepare("SELECT DISTINCT
                                         LEFT JOIN
                                         slotting.item_settings ON WHSE = WAREHOUSE AND ITEM = ITEM_NUMBER
                                             AND PKGU = PACKAGE_UNIT
-                                            LEFT JOIN
-                                                slotting.itemsmoved_2018goal ON goal_whse = SCORE_WHSE
                                         AND goal_item = A.ITEM_NUMBER
                                         AND goal_pkgu = A.PACKAGE_UNIT
                                          LEFT JOIN slotting.slottingdb_itemactions on openactions_whse = SCORE_WHSE and openactions_item = SCORE_ITEM
@@ -69,7 +68,6 @@ $TOP_SCORE = $conn1->prepare("SELECT DISTINCT
                                         A.WAREHOUSE = $var_whse
                                             and PACKAGE_TYPE = '$zone' and  LMSLR not in (2,4) and A.PACKAGE_UNIT = 1  
                                                 AND (HOLDLOCATION IS NULL or HOLDLOCATION = ' ')
-                                                AND goal_item IS NULL
                                                 and dsl2csls is null $whs6L01filter $itemnumsql
                                     ORDER BY E.SCORE_TOTALSCORE_OPT - E.SCORE_TOTALSCORE DESC, E.SCORE_TOTALSCORE asc, E.SCORE_REPLENSCORE asc, E.SCORE_WALKSCORE asc
                                     LIMIT $returncount");
