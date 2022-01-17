@@ -186,16 +186,14 @@
             } else {
                 die;
             }
+            
             ?> 
-
+      
 
             <?php
             ini_set('max_execution_time', 99999);
-
-            $pdo_dsn = "odbc:DRIVER={iSeries Access ODBC DRIVER};SYSTEM=A";
-            $pdo_username = "BHUD01";
-            $pdo_password = "tucker1234";
-            $aseriesconn = new PDO($pdo_dsn, $pdo_username, $pdo_password, array());
+            require '../globalincludes/usa_asys.php';
+            
 
 
 
