@@ -409,7 +409,7 @@
                     //START of Canada Slot Rec
                     $pdo_dsn = "odbc:DRIVER={iSeries Access ODBC DRIVER};SYSTEM=A";
                     $pdo_username = "BHUDS1";
-                    $pdo_password = "tucker1234";
+                    $pdo_password = "g1acier1";
                     $aseriesconn = new PDO($pdo_dsn, $pdo_username, $pdo_password, array());
 
                     #Query the Database into a result set - 
