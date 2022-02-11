@@ -2,7 +2,7 @@
 <header id="header" class="navbar"   style="border-radius: 0px;position: fixed; width: 100%; top: 0; z-index: 1030;">
     <?php if (isset($_SESSION['MYUSER'])) { ?>
         <?php
-        if (strtoupper($_SESSION['MYUSER']) === 'BHUD01' || strtoupper($_SESSION['MYUSER']) === 'JMOO07' || strtoupper($_SESSION['MYUSER']) === 'KDIC01' || strtoupper($_SESSION['MYUSER']) === 'DMCKEE' || strtoupper($_SESSION['MYUSER']) === 'AJON01' || strtoupper($_SESSION['MYUSER']) === 'AROB01'||strtoupper($_SESSION['MYUSER']) === 'WHILL'||strtoupper($_SESSION['MYUSER']) === 'BROEBU'){
+        if (strtoupper($_SESSION['MYUSER']) === 'BHUD01' || strtoupper($_SESSION['MYUSER']) === 'ARAJ1' || strtoupper($_SESSION['MYUSER']) === 'JMOO07' || strtoupper($_SESSION['MYUSER']) === 'KDIC01' || strtoupper($_SESSION['MYUSER']) === 'DMCKEE' || strtoupper($_SESSION['MYUSER']) === 'AJON01' || strtoupper($_SESSION['MYUSER']) === 'AROB01' || strtoupper($_SESSION['MYUSER']) === 'WHILL' || strtoupper($_SESSION['MYUSER']) === 'BROEBU') {
             $var_userid = $_SESSION['MYUSER'];
             $whssql = $conn1->prepare("SELECT slottingDB_users_PRIMDC from slotting.slottingdb_users WHERE idslottingDB_users_ID = '$var_userid'");
             $whssql->execute();
@@ -70,7 +70,7 @@
             data: formData,
             success: function (result) {
                 $('#whsemodal').modal('hide');
-                  window.location.reload();
+                window.location.reload();
             }
         });
     });
