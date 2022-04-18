@@ -7,7 +7,7 @@ if (in_array($whspicked, $USAarray)) {
     //START of USA Grid5 pick data
     $pdo_dsn = "odbc:DRIVER={iSeries Access ODBC DRIVER};SYSTEM=A";
     $pdo_username = "BHUD01";
-    $pdo_password = "1glacier1";
+    $pdo_password = "2glacier2";
     $aseriesconn = new PDO($pdo_dsn, $pdo_username, $pdo_password, array());
 
     $resultgrids = $aseriesconn->prepare("SELECT case when LMDEEP <> 24 then LMGRD5||'Sub'||LMDEEP else LMGRD5 end as LMGRD5, LMVOL9, count(LMCOMP) FROM A.HSIPCORDTA.NPFLSM WHERE LMTIER = 'L04' and LMWHSE = $whspicked GROUP BY case when LMDEEP <> 24 then LMGRD5||'Sub'||LMDEEP else LMGRD5 end, LMVOL9 HAVING count(LMCOMP) >= 50 ORDER BY LMVOL9 asc");

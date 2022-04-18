@@ -14,7 +14,7 @@ if ($post_itempicked >= 1000000 && $post_itempicked <= 9999999) {
         //START of USA True fit Calc
         $pdo_dsn = "odbc:DRIVER={iSeries Access ODBC DRIVER};SYSTEM=A";
         $pdo_username = "BHUD01";
-        $pdo_password = "1glacier1";
+        $pdo_password = "2glacier2";
         $aseriesconn = new PDO($pdo_dsn, $pdo_username, $pdo_password, array());
 
         #Query the Database into a result set - 
