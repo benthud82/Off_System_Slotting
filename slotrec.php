@@ -179,7 +179,7 @@
                     //START of USA Slot Rec
                     $pdo_dsn = "odbc:DRIVER={iSeries Access ODBC DRIVER};SYSTEM=A";
                     $pdo_username = "BHUD01";
-                    $pdo_password = "2glacier2";
+                    $pdo_password = "3glacier3";
                     $aseriesconn = new PDO($pdo_dsn, $pdo_username, $pdo_password, array());
 
                     #Query the Database into a result set - 

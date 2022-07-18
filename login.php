@@ -3,9 +3,9 @@
 // Check if username and password are correct
 $sessionuser = $_POST["username"];
 $sessionpw = $_POST["password"];
-include_once 'connection/connection_details.php';
-include '../globalincludes/usa_asys_session.php';  //does a-system PW work?
-include 'globaldata/inusertable.php';  //has the user registered?
+require_once 'connection/connection_details.php';
+require_once '../globalincludes/usa_asys_session.php';  //does a-system PW work?
+require_once 'globaldata/inusertable.php';  //has the user registered?
 
 if (count($usersetarray) == 0) {  //the user is not logged in redirect to registration page
     header('Location: registration.php');
@@ -19,7 +19,7 @@ if (count($usersetarray) == 0) {  //the user is not logged in redirect to regist
     $_SESSION['MYPASS'] = $_POST["password"];
 
     //write to MySQL Database that user logged in:
-    include_once 'connection/connection_details.php';
+    require_once 'connection/connection_details.php';
     date_default_timezone_set('America/New_York');
     $datetime = date('Y-m-d H:i:s');
     $usertsm = $_SESSION['MYUSER'];
