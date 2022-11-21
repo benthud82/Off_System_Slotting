@@ -186,16 +186,41 @@
             } else {
                 die;
             }
-            
             ?> 
-      
+
 
             <?php
             ini_set('max_execution_time', 99999);
             require '../globalincludes/usa_asys.php';
-            
+                include_once 'connection/connection_details.php';
 
+            //offsite ranges
+            //pull in offsite ranges to exclude from location onhand pull
+            $sql_locrange = $conn1->prepare("SELECT 
+                                offsite_start, offsite_end
+                            FROM
+                                nahsi.offsite_ranges
+                            WHERE
+                                offsite_whse = '$var_whse'");
+            $sql_locrange->execute();
+            $array_locrange = $sql_locrange->fetchAll(pdo::FETCH_ASSOC);
 
+            //build location ranges to exclude
+            $locrange_exlude = ' and ';
+            $locrange_include = ' and (';
+            $keycount = sizeof($array_locrange) - 1;
+            foreach ($array_locrange as $key => $value) {
+                $loc_start = $array_locrange[$key]['offsite_start'];
+                $loc_end = $array_locrange[$key]['offsite_end'];
+
+                if ($key !== $keycount) {
+                    $locrange_exlude .= " (LOLOC# not between " . "'$loc_start'" . " AND " . "'$loc_end') and ";
+                    $locrange_include .= " LOLOC# between " . "'$loc_start'" . " AND " . "'$loc_end' or ";
+                } else {
+                    $locrange_exlude .= "  (LOLOC# not between " . "'$loc_start'" . " AND " . "'$loc_end')";
+                    $locrange_include .= "  LOLOC#  between " . "'$loc_start'" . " AND " . "'$loc_end')";
+                }
+            }
 
             switch ($var_whse) {
                 case "7":
@@ -222,7 +247,7 @@
                                                     HSIPCORDTA.NPFLOC
                                                 WHERE
                                                     LOITEM = WRSITM and LOWHSE = WRSWHS
-                                                    and LOLOC# < 'W50%') as ONHAND,
+                                                    $locrange_exlude) as ONHAND,
                                             (SELECT 
                                                     max(PCPPKU)
                                                 FROM
@@ -235,14 +260,14 @@
                                                     HSIPCORDTA.NPFLOC
                                                 WHERE
                                                     LOITEM = WRSITM and LOWHSE = WRSWHS
-                                                    and (LOLOC# >= 'W50%')) as OFFSITEOH,
+                                                    $locrange_include) as OFFSITEOH,
                                              (SELECT 
                                                     SUM(LORMTQ)
                                                 FROM
                                                     HSIPCORDTA.NPFLOC
                                                 WHERE
                                                     LOITEM = WRSITM and LOWHSE = WRSWHS
-                                                    and (LOLOC# >= 'W50%')) as OFFSITEMOVEQTY
+                                                    $locrange_include) as OFFSITEMOVEQTY
                                         FROM
                                             HSIPCORDTA.NPFIMS,
                                             HSIPCORDTA.NPFLOC,
@@ -266,8 +291,8 @@
                                                 FROM
                                                     HSIPCORDTA.NPFLOC
                                                 WHERE 
-                                                     (LOLOC# >= 'W50%') AND LOWHSE = $var_whse)
-                                       and LOLOC#  < 'W50%'
+                                                     LOWHSE = $var_whse $locrange_include)
+                                        $locrange_exlude
                                         GROUP BY WRSWHS , WRSITM , IMDESC , LOPRTA, VCPKGU, VCCLAS, VCLOC#, SHIP_QTY_MN");
 
                     $result->execute();
