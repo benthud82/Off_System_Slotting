@@ -293,8 +293,17 @@
                                                                           ITEM_NUMBER = IMITEM
                                                                           and WRSWHS  = WAREHOUSE
                                                      WHERE
-                                                             WRSWHS = 2 
-                                                     GROUP BY WRSWHS, WRSITM, IMDESC, 'AAAAA', 1, 'A'");
+                                                             WRSWHS = $var_whse 
+                                                     GROUP BY WRSWHS, WRSITM, IMDESC, 'AAAAA', 1, 'A'
+                                                     HAVING (
+                                                                   SELECT
+                                                                          SUM(LOONHD)
+                                                                   FROM
+                                                                          HSIPCORDTA.NPFLOC
+                                                                   WHERE
+                                                                          LOITEM     = WRSITM
+                                                                          and LOWHSE = WRSWHS $locrange_include
+                                                            ) > 0");
 
                     $result->execute();
                     $resultsetarray = $result->fetchAll(PDO::FETCH_ASSOC);
