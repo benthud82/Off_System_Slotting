@@ -237,9 +237,9 @@
                                             WRSITM as ITEM,
                                             IMDESC as DESCRIPTION,
                                             LOPRTA as ALLOC,
-                                            VCPKGU as PKGU,
-                                            VCCLAS as MCCLASS,
-                                            VCLOC# as LOCATION,
+                                            LOPKGU as PKGU,
+                                            'A' as MCCLASS,
+                                            LOLOC# as LOCATION,
                                             SHIP_QTY_MN as DAILYQTY,
                                             (SELECT 
                                                     SUM(LOONHD)
@@ -272,19 +272,12 @@
                                             HSIPCORDTA.NPFIMS,
                                             HSIPCORDTA.NPFLOC,
                                             HSIPCORDTA.NPFWRS,
-                                            HSIPCORDTA.NPFMVC,
                                             HSIPCORDTA.NPTSLD
                                         WHERE 
                                             WRSITM = LOITEM and LOWHSE = WRSWHS
                                                 and ITEM_NUMBER = WRSITM
                                                 and WRSWHS = WAREHOUSE
-                                                and VCPKGU = PACKAGE_UNIT
-                                                and LOPKGU = VCPKGU
                                                 and IMITEM = WRSITM
-                                                and VCLOC# = CUR_LOCATION
-                                                and LOLOC# = VCLOC#
-                                                and VCWHSE = WRSWHS
-                                                and VCITEM = WRSITM
                                                 and WRSWHS = $var_whse
                                                 and WRSITM IN (SELECT 
                                                     LOITEM
@@ -292,8 +285,8 @@
                                                     HSIPCORDTA.NPFLOC
                                                 WHERE 
                                                      LOWHSE = $var_whse $locrange_include)
-                                        $locrange_exlude
-                                        GROUP BY WRSWHS , WRSITM , IMDESC , LOPRTA, VCPKGU, VCCLAS, VCLOC#, SHIP_QTY_MN");
+                                        $locrange_exlude and WRSITM = '8903279'
+                                        GROUP BY WRSWHS , WRSITM , IMDESC , LOPRTA, LOPKGU, 'NA', LOLOC#, SHIP_QTY_MN");
 
                     $result->execute();
                     $resultsetarray = $result->fetchAll(PDO::FETCH_ASSOC);
