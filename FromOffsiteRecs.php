@@ -233,60 +233,68 @@
                     $offsiterange = 'X%';
                     break;
                 case "2":
-                    $result = $aseriesconn->prepare("SELECT DISTINCT WRSWHS as WHSE,
-                                            WRSITM as ITEM,
-                                            IMDESC as DESCRIPTION,
-                                            LOPRTA as ALLOC,
-                                            LOPKGU as PKGU,
-                                            'A' as MCCLASS,
-                                            LOLOC# as LOCATION,
-                                            SHIP_QTY_MN as DAILYQTY,
-                                            (SELECT 
-                                                    SUM(LOONHD)
-                                                FROM
-                                                    HSIPCORDTA.NPFLOC
-                                                WHERE
-                                                    LOITEM = WRSITM and LOWHSE = WRSWHS
-                                                    $locrange_exlude) as ONHAND,
-                                            (SELECT 
-                                                    max(PCPPKU)
-                                                FROM
-                                                    HSIPCORDTA.NPFCPC
-                                                WHERE
-                                                    PCITEM = WRSITM) as PALLETQTY,
-                                            (SELECT 
-                                                    SUM(LOONHD)
-                                                FROM
-                                                    HSIPCORDTA.NPFLOC
-                                                WHERE
-                                                    LOITEM = WRSITM and LOWHSE = WRSWHS
-                                                    $locrange_include) as OFFSITEOH,
-                                             (SELECT 
-                                                    SUM(LORMTQ)
-                                                FROM
-                                                    HSIPCORDTA.NPFLOC
-                                                WHERE
-                                                    LOITEM = WRSITM and LOWHSE = WRSWHS
-                                                    $locrange_include) as OFFSITEMOVEQTY
-                                        FROM
-                                            HSIPCORDTA.NPFIMS,
-                                            HSIPCORDTA.NPFLOC,
-                                            HSIPCORDTA.NPFWRS,
-                                            HSIPCORDTA.NPTSLD
-                                        WHERE 
-                                            WRSITM = LOITEM and LOWHSE = WRSWHS
-                                                and ITEM_NUMBER = WRSITM
-                                                and WRSWHS = WAREHOUSE
-                                                and IMITEM = WRSITM
-                                                and WRSWHS = $var_whse
-                                                and WRSITM IN (SELECT 
-                                                    LOITEM
-                                                FROM
-                                                    HSIPCORDTA.NPFLOC
-                                                WHERE 
-                                                     LOWHSE = $var_whse $locrange_include)
-                                        $locrange_exlude and WRSITM = '8903279'
-                                        GROUP BY WRSWHS , WRSITM , IMDESC , LOPRTA, LOPKGU, 'NA', LOLOC#, SHIP_QTY_MN");
+                    $result = $aseriesconn->prepare("SELECT
+                                                            WRSWHS           as WHSE       ,
+                                                            WRSITM           as ITEM       ,
+                                                            IMDESC           as DESCRIPTION,
+                                                            1 as PKGU,
+                                                            'A' as MCCLASS,
+                                                            sum(WRSPAL)      as ALLOC      ,
+                                                            'AAAAA'          as LOCATION   ,
+                                                            sum(SHIP_QTY_MN) as DAILYQTY   ,
+                                                            (
+                                                                   SELECT
+                                                                          SUM(LOONHD)
+                                                                   FROM
+                                                                          HSIPCORDTA.NPFLOC
+                                                                   WHERE
+                                                                          LOITEM     = WRSITM
+                                                                          and LOWHSE = WRSWHS $locrange_exlude
+                                                            )
+                                                            as ONHAND,
+                                                            (
+                                                                   SELECT
+                                                                          max(PCPPKU)
+                                                                   FROM
+                                                                          HSIPCORDTA.NPFCPC
+                                                                   WHERE
+                                                                          PCITEM = WRSITM
+                                                            )
+                                                            as PALLETQTY,
+                                                            (
+                                                                   SELECT
+                                                                          SUM(LOONHD)
+                                                                   FROM
+                                                                          HSIPCORDTA.NPFLOC
+                                                                   WHERE
+                                                                          LOITEM     = WRSITM
+                                                                          and LOWHSE = WRSWHS $locrange_include
+                                                            )
+                                                            as OFFSITEOH,
+                                                            (
+                                                                   SELECT
+                                                                          SUM(LORMTQ)
+                                                                   FROM
+                                                                          HSIPCORDTA.NPFLOC
+                                                                   WHERE
+                                                                          LOITEM     = WRSITM
+                                                                          and LOWHSE = WRSWHS $locrange_include
+                                                            )
+                                                            as OFFSITEMOVEQTY
+                                                     FROM
+                                                            HSIPCORDTA.NPFIMS
+                                                            JOIN
+                                                                   HSIPCORDTA.NPFWRS
+                                                                   on
+                                                                          IMITEM = WRSITM
+                                                            JOIN
+                                                                   HSIPCORDTA.NPTSLS
+                                                                   on
+                                                                          ITEM_NUMBER = IMITEM
+                                                                          and WRSWHS  = WAREHOUSE
+                                                     WHERE
+                                                             WRSWHS = 2 
+                                                     GROUP BY WRSWHS, WRSITM, IMDESC, 'AAAAA', 1, 'A'");
 
                     $result->execute();
                     $resultsetarray = $result->fetchAll(PDO::FETCH_ASSOC);
@@ -457,7 +465,14 @@
                                                 WHERE
                                                     LOLOC# like '$offsiterange' AND LOWHSE = $var_whse)
                                         and LOLOC# not like '$offsiterange' 
-                                        GROUP BY WRSWHS , WRSITM , IMDESC , LOPRTA, VCPKGU, VCCLAS, VCLOC#, SHIP_QTY_MN / VCADBS");
+                                        GROUP BY WRSWHS , WRSITM , IMDESC , LOPRTA, VCPKGU, VCCLAS, VCLOC#, SHIP_QTY_MN / VCADBS
+                                        HAVING (SELECT 
+                                                    SUM(LOONHD)
+                                                FROM
+                                                    HSIPCORDTA.NPFLOC
+                                                WHERE
+                                                    LOITEM = WRSITM and LOWHSE = WRSWHS
+                                                    and LOLOC# like '$offsiterange') > 0    ");
 
                 $result->execute();
                 $resultsetarray = $result->fetchAll(PDO::FETCH_ASSOC);
@@ -541,13 +556,10 @@
                 $displayarray[$counter]['ONHAND'] = $ONHAND;
                 $displayarray[$counter]['ALLOC'] = $ALLOC;
                 $displayarray[$counter]['DAILYQTY'] = $DAILYQTY;
-                $displayarray[$counter]['MCCLASS'] = $MCCLASS;
-                $displayarray[$counter]['PKGU'] = $PKGU;
                 $displayarray[$counter]['PALLETQTY'] = $PALLETQTY;
                 $displayarray[$counter]['DAYSOH'] = $DAYSOH;
                 $displayarray[$counter]['moveqty'] = $moveqty;
                 $displayarray[$counter]['palletcount'] = $palletcount;
-                $displayarray[$counter]['LOCATION'] = $LOCATION;
                 $displayarray[$counter]['OffsiteOH'] = $OffsiteOH;
                 $counter += 1;
             }
@@ -620,13 +632,10 @@
                                     <th style="text-transform: uppercase;">Whse</th>
                                     <th style="text-transform: uppercase;">Item</th>
                                     <th style="text-transform: uppercase;">Description</th>
-                                    <th style="text-transform: uppercase;">Location</th>
                                     <th style="text-transform: uppercase;">Qty OH</th>
                                     <th style="text-transform: uppercase;">Offsite OH</th>
                                     <th style="text-transform: uppercase;">Allocations</th>
                                     <th style="text-transform: uppercase;">Daily Ship Qty</th>
-                                    <th style="text-transform: uppercase;">Movement Class</th>
-                                    <th style="text-transform: uppercase;">Package Unit</th>
                                     <th style="text-transform: uppercase;">Pallet Qty</th>
                                     <th style="text-transform: uppercase;">Days OH</th>
                                     <th style="text-transform: uppercase;">Qty To Move</th>
@@ -640,13 +649,10 @@
                                     echo "<td>" . $displayarray[$key]['WHSE'] . "</td>";
                                     echo "<td>" . $displayarray[$key]['ITEM'] . "</td>";
                                     echo "<td>" . $displayarray[$key]['DESCRIPTION'] . "</td>";
-                                    echo "<td>" . $displayarray[$key]['LOCATION'] . "</td>";
                                     echo "<td>" . $displayarray[$key]['ONHAND'] . "</td>";
                                     echo "<td>" . $displayarray[$key]['OffsiteOH'] . "</td>";
                                     echo "<td>" . $displayarray[$key]['ALLOC'] . "</td>";
                                     echo "<td>" . $displayarray[$key]['DAILYQTY'] . "</td>";
-                                    echo "<td>" . $displayarray[$key]['MCCLASS'] . "</td>";
-                                    echo "<td>" . $displayarray[$key]['PKGU'] . "</td>";
                                     echo "<td>" . $displayarray[$key]['PALLETQTY'] . "</td>";
                                     echo "<td>" . $displayarray[$key]['DAYSOH'] . "</td>";
                                     echo "<td>" . $displayarray[$key]['moveqty'] . "</td>";
