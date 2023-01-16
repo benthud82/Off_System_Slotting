@@ -38,7 +38,7 @@ switch ($var_report) {  //build sql statement for report
                                         CPCCHEI * .393701 as CPCCHEI,
                                         CPCCWID * .393701 as CPCCWID,
                                        A. LMDEEP,
-                                        A.LMHIGH,
+                                        A.LMHIGH,   
                                         A.LMWIDE,
                                         A.CPCCPKU
                                     FROM
