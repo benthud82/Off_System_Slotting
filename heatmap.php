@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <?php
-    include 'sessioninclude.php';
+    require_once 'sessioninclude.php';
     include_once 'connection/connection_details.php';
     include_once '../globalfunctions/slottingfunctions.php';
     $var_userid = $_SESSION['MYUSER'];

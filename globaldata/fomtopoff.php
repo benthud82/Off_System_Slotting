@@ -90,12 +90,12 @@ if (in_array($whsenum, $USAarray)) {
     $aseriesconn = new PDO($pdo_dsn, $pdo_username, $pdo_password, array());
 
     #Query the Database into a result set - 
-    $result = $aseriesconn->prepare("SELECT LOWHSE as WHSE, LOITEM as ITEM, LOLOC# as LOCATION, LOPKGU as PKGU, LOONHD - LOPRTA + LOPMTQ as ONHAND, LOMINC as LOCMIN, LOMAXC as LOCMAX, VCFTIR as TIER, VCGRD5 as GRID5, WRSROH - LOPMTQ as RESOH, VCCLAS as ITEMMC, LOWHSE||LOITEM||LOPKGU as KEYValue FROM A.HSIPCORDTA.NPFLOC, A.HSIPCORDTA.NPFMVC,  A.HSIPCORDTA.NPFWRS WHERE LOLOC# = VCLOC# and LOWHSE = VCWHSE and LOWHSE = WRSWHS and WRSITM = VCITEM and WRSITM = LOITEM and LOITEM not in (select LTITEM from A.HSIPCORDTA.NPFLOT where LTFLAG <> '') and LOITEM not in (select LMITEM from A.HSIPCORDTA.NPFLSM where LMSLR# = '2' and LMWHSE = $whsenum) and VCWHSE = $whsenum and WRSROH - LOPMTQ > 0 and VCCLAS = '" . $mc . "' and VCFTIR = '" . $tier . "'");
+    $result = $aseriesconn->prepare("SELECT LOWHSE as WHSE, LOITEM as ITEM, LOLOC# as LOCATION, LOPKGU as PKGU, LOONHD - LOPRTA + LOPMTQ as ONHAND, LOMINC as LOCMIN, LOMAXC as LOCMAX, VCFTIR as TIER, VCGRD5 as GRID5, WRSROH - LOPMTQ as RESOH, VCCLAS as ITEMMC, LOWHSE||LOITEM||LOPKGU as KEYValue FROM A.HSIPCORDTA.NPFLOC, A.HSIPCORDTA.NPFMVC,  A.HSIPCORDTA.NPFWRS WHERE LOLOC# = VCLOC# and LOWHSE = VCWHSE and LOWHSE = WRSWHS and WRSITM = VCITEM and WRSITM = LOITEM and LOITEM not in (select IMITEM from A.HSIPCORDTA.NPFIMS where IMLCTL <> '') and LOITEM not in (select LMITEM from A.HSIPCORDTA.NPFLSM where LMSLR# = '2' and LMWHSE = $whsenum) and VCWHSE = $whsenum and WRSROH - LOPMTQ > 0 and VCCLAS = '" . $mc . "' and VCFTIR = '" . $tier . "'");
     $result->execute();
     $resultsetarray = $result->fetchAll(PDO::FETCH_NUM);
 
     //determine whether B or W location.  Take min of location with distinct item so only one reserve is returned
-    $result2 = $aseriesconn->prepare("SELECT DISTINCT LOITEM as KEYValue, min(LOLOC#) as LOC FROM A.HSIPCORDTA.NPFLOC WHERE LOSCDE = 'R'  and LOMAXC = 0 and LOONHD - LOPMTQ > 0 and LOWHSE = $whsenum and LOITEM not in (select LTITEM from A.HSIPCORDTA.NPFLOT where LTFLAG <> '') and LOITEM not in (select LMITEM from A.HSIPCORDTA.NPFLSM where LMSLR# = '2' and LMWHSE = $whsenum) GROUP BY LOITEM");
+    $result2 = $aseriesconn->prepare("SELECT DISTINCT LOITEM as KEYValue, min(LOLOC#) as LOC FROM A.HSIPCORDTA.NPFLOC WHERE LOSCDE = 'R'  and LOMAXC = 0 and LOONHD - LOPMTQ > 0 and LOWHSE = $whsenum and LOITEM not in (select IMITEM from A.HSIPCORDTA.NPFIMS where IMLCTL <> '') and LOITEM not in (select LMITEM from A.HSIPCORDTA.NPFLSM where LMSLR# = '2' and LMWHSE = $whsenum) GROUP BY LOITEM");
     $result2->execute();
     $reserveresultsetarray = $result2->fetchAll(PDO::FETCH_ASSOC);
 } else {
@@ -105,7 +105,7 @@ if (in_array($whsenum, $USAarray)) {
     $aseriesconn = new PDO($pdo_dsn, $pdo_username, $pdo_password, array());
 
 #Query the Database into a result set - 
-    $result = $aseriesconn->prepare("SELECT LOWHSE as WHSE, LOITEM as ITEM, LOLOC# as LOCATION, LOPKGU as PKGU, LOONHD - LOPRTA + LOPMTQ as ONHAND, LOMINC as LOCMIN, LOMAXC as LOCMAX, VCFTIR as TIER, VCGRD5 as GRID5, WRSROH - LOPMTQ as RESOH, VCCLAS as ITEMMC, LOWHSE||LOITEM||LOPKGU as KEYValue FROM A.ARCPCORDTA.NPFLOC, A.ARCPCORDTA.NPFMVC,  A.ARCPCORDTA.NPFWRS WHERE LOLOC# = VCLOC# and LOWHSE = VCWHSE and LOWHSE = WRSWHS and WRSITM = VCITEM and WRSITM = LOITEM and LOITEM not in (select LTITEM from A.ARCPCORDTA.NPFLOT where LTFLAG <> '') and LOITEM not in (select LMITEM from A.ARCPCORDTA.NPFLSM where LMSLR# = '2' and LMWHSE = $whsenum) and VCWHSE = $whsenum and WRSROH - LOPMTQ > 0 and VCCLAS = '" . $mc . "' and VCFTIR = '" . $tier . "'");
+    $result = $aseriesconn->prepare("SELECT LOWHSE as WHSE, LOITEM as ITEM, LOLOC# as LOCATION, LOPKGU as PKGU, LOONHD - LOPRTA + LOPMTQ as ONHAND, LOMINC as LOCMIN, LOMAXC as LOCMAX, VCFTIR as TIER, VCGRD5 as GRID5, WRSROH - LOPMTQ as RESOH, VCCLAS as ITEMMC, LOWHSE||LOITEM||LOPKGU as KEYValue FROM A.ARCPCORDTA.NPFLOC, A.ARCPCORDTA.NPFMVC,  A.ARCPCORDTA.NPFWRS WHERE LOLOC# = VCLOC# and LOWHSE = VCWHSE and LOWHSE = WRSWHS and WRSITM = VCITEM and WRSITM = LOITEM and LOITEM not in (select IM
     $result->execute();
     $resultsetarray = $result->fetchAll(PDO::FETCH_NUM);
 }

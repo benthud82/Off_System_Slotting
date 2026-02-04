@@ -602,7 +602,7 @@
                     xAxis: {
                         categories: [], labels: {
                             rotation: -90,
-                            y: 25,
+                            y: 25,  
                             align: 'right',
                             step: 5,
                             style: {
